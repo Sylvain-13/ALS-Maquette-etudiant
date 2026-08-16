@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALS — Espace Étudiant</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0B1628;--navy2:#142038;--navy3:#1E2F4D;
+  --gold:#F5A623;--gold2:#FFB83F;--gold-dim:#F5A62322;
+  --teal:#00C9A7;--teal-dim:#00C9A715;
+  --red:#FF5C5C;--green:#00E096;
+  --txt:#E8EDF5;--txt2:#8A9BB5;--txt3:#4A5A75;
+  --card:#162033;--card2:#1C2A42;
+  --border:#1F3050;
+  --r:14px;--r2:10px;--r3:20px;
+  --shadow:0 4px 24px #00000040;
+}
+html{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--txt);min-height:100vh}
+body{min-height:100vh}
+
+/* ===== LOGIN ===== */
+#login-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,#1E3A5F 0%,var(--navy) 70%);
+  padding:2rem;
+}
+.login-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r3);
+  padding:3rem 2.5rem;width:100%;max-width:440px;
+  box-shadow:0 32px 80px #00000060;
+  animation:fadeUp .6s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+.logo-wrap{display:flex;align-items:center;gap:.75rem;margin-bottom:2.5rem}
+.logo-icon{
+  width:44px;height:44px;background:var(--gold);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;
+}
+.logo-text h1{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--txt);line-height:1.1}
+.logo-text span{font-size:.75rem;color:var(--txt2);letter-spacing:.05em;text-transform:uppercase}
+
+.login-title{font-size:1.5rem;font-weight:600;margin-bottom:.4rem}
+.login-sub{font-size:.9rem;color:var(--txt2);margin-bottom:2rem}
+
+.field{margin-bottom:1.2rem}
+.field label{display:block;font-size:.8rem;font-weight:500;color:var(--txt2);margin-bottom:.5rem;letter-spacing:.03em;text-transform:uppercase}
+.field input{
+  width:100%;background:var(--navy2);border:1px solid var(--border);
+  border-radius:var(--r2);padding:.85rem 1rem;color:var(--txt);
+  font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
+.field input::placeholder{color:var(--txt3)}
+
+.btn-primary{
+  width:100%;padding:.95rem;background:var(--gold);color:var(--navy);
+  border:none;border-radius:var(--r2);font-family:'DM Sans',sans-serif;
+  font-weight:600;font-size:1rem;cursor:pointer;
+  transition:background .2s,transform .1s,box-shadow .2s;
+  margin-top:.5rem;
+}
+.btn-primary:hover{background:var(--gold2);box-shadow:0 4px 20px #F5A62340;transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+
+.login-footer{text-align:center;margin-top:1.5rem;font-size:.82rem;color:var(--txt2)}
+.login-footer a{color:var(--gold);text-decoration:none}
+
+/* ===== MAIN APP ===== */
+#app{display:none;min-height:100vh;flex-direction:column}
+#app.visible{display:flex}
+
+/* TOPBAR */
+.topbar{
+  background:var(--card);border-bottom:1px solid var(--border);
+  padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.tb-left{display:flex;align-items:center;gap:1rem}
+.tb-logo{width:36px;height:36px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.tb-title{font-family:'DM Serif Display',serif;font-size:1.2rem}
+.tb-badge{background:var(--gold-dim);color:var(--gold);font-size:.7rem;font-weight:600;padding:.2rem .6rem;border-radius:20px;border:1px solid var(--gold);letter-spacing:.05em}
+.tb-right{display:flex;align-items:center;gap:1rem}
+.avatar{
+  width:36px;height:36px;background:var(--teal);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.9rem;
+  color:var(--navy);cursor:pointer;
+}
+.btn-logout{
+  background:transparent;border:1px solid var(--border);color:var(--txt2);
+  padding:.4rem .9rem;border-radius:8px;font-size:.8rem;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all .2s;
+}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+/* LAYOUT */
+.main-layout{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{
+  width:240px;background:var(--card);border-right:1px solid var(--border);
+  padding:1.5rem 1rem;display:flex;flex-direction:column;gap:.3rem;flex-shrink:0;
+}
+.nav-label{font-size:.7rem;color:var(--txt3);font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.5rem .75rem;margin-top:.5rem}
+.nav-item{
+  display:flex;align-items:center;gap:.75rem;padding:.7rem .75rem;
+  border-radius:var(--r2);cursor:pointer;font-size:.9rem;color:var(--txt2);
+  transition:all .2s;border:1px solid transparent;
+}
+.nav-item:hover{background:var(--card2);color:var(--txt)}
+.nav-item.active{background:var(--gold-dim);color:var(--gold);border-color:var(--gold);font-weight:500}
+.nav-icon{font-size:1.1rem;width:22px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--gold);color:var(--navy);font-size:.65rem;font-weight:700;padding:.15rem .45rem;border-radius:20px}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:2rem;background:var(--navy)}
+.page{display:none;animation:fadeUp .4s ease both}
+.page.active{display:block}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1.5rem}
+.card-title{font-size:.8rem;color:var(--txt2);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1rem}
+
+/* PAGE HEADER */
+.page-header{margin-bottom:2rem}
+.page-header h2{font-family:'DM Serif Display',serif;font-size:1.8rem;margin-bottom:.3rem}
+.page-header p{color:var(--txt2);font-size:.95rem}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;
+  transition:border-color .2s,transform .2s;cursor:default;
+}
+.stat-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.stat-icon.gold{background:var(--gold-dim)}
+.stat-icon.teal{background:var(--teal-dim)}
+.stat-icon.red{background:#FF5C5C15}
+.stat-icon.green{background:#00E09615}
+.stat-label{font-size:.8rem;color:var(--txt2);margin-bottom:.2rem}
+.stat-val{font-size:1.5rem;font-weight:600;color:var(--txt)}
+
+/* STATUS BADGE */
+.badge{display:inline-flex;align-items:center;gap:.35rem;padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600;letter-spacing:.03em}
+.badge.normal{background:#00C9A715;color:var(--teal);border:1px solid #00C9A740}
+.badge.retard{background:#F5A62315;color:var(--gold);border:1px solid #F5A62340}
+.badge.attente{background:#4A5A7520;color:var(--txt2);border:1px solid var(--border)}
+.badge.complet{background:#00E09615;color:var(--green);border:1px solid #00E09640}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0}
+.timeline-item{display:flex;gap:1rem;padding-bottom:1.5rem;position:relative}
+.timeline-item:not(:last-child)::before{
+  content:'';position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--border);
+}
+.tl-dot{
+  width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;flex-shrink:0;border:2px solid;
+}
+.tl-dot.done{background:var(--teal-dim);border-color:var(--teal)}
+.tl-dot.active{background:var(--gold-dim);border-color:var(--gold);animation:pulse 2s infinite}
+.tl-dot.pending{background:var(--card2);border-color:var(--border)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 #F5A62330}50%{box-shadow:0 0 0 6px #F5A62300}}
+.tl-content{flex:1;padding-top:.3rem}
+.tl-title{font-weight:500;font-size:.95rem;margin-bottom:.2rem}
+.tl-desc{font-size:.82rem;color:var(--txt2)}
+.tl-date{font-size:.75rem;color:var(--txt3);margin-top:.2rem}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-grid .full{grid-column:1/-1}
+.form-label{display:block;font-size:.8rem;font-weight:500;color:var(--txt2);margin-bottom:.5rem;letter-spacing:.03em;text-transform:uppercase}
+.form-input,.form-select{
+  width:100%;background:var(--navy2);border:1px solid var(--border);
+  border-radius:var(--r2);padding:.8rem 1rem;color:var(--txt);
+  font-family:'DM Sans',sans-serif;font-size:.92rem;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.form-input:focus,.form-select:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
+.form-select{cursor:pointer}
+.form-select option{background:var(--navy2);color:var(--txt)}
+.btn-send{
+  display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;
+  background:var(--gold);color:var(--navy);border:none;border-radius:var(--r2);
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:.95rem;cursor:pointer;
+  transition:all .2s;
+}
+.btn-send:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 4px 20px #F5A62340}
+
+/* ALERT */
+.alert{
+  display:none;align-items:center;gap:.75rem;padding:1rem 1.25rem;
+  border-radius:var(--r2);margin-top:1rem;font-size:.9rem;
+}
+.alert.success{background:#00E09615;border:1px solid #00E09640;color:var(--green)}
+.alert.show{display:flex}
+
+/* ===== REPERTOIRE ENTREPRISES (etudiant) ===== */
+.ac-suggestions{position:absolute;top:100%;left:0;right:0;background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);margin-top:.3rem;max-height:220px;overflow-y:auto;z-index:50;display:none;box-shadow:var(--shadow)}
+.ac-suggestions.show{display:block}
+.ac-item{padding:.65rem .9rem;font-size:.85rem;cursor:pointer;border-bottom:1px solid var(--border)}
+.ac-item:last-child{border-bottom:none}
+.ac-item:hover,.ac-item.hl{background:var(--gold-dim);color:var(--gold)}
+.ac-item .ac-sub{font-size:.72rem;color:var(--txt3)}
+.ac-empty{padding:.65rem .9rem;font-size:.8rem;color:var(--txt3)}
+
+.ent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.ent-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;display:flex;flex-direction:column;gap:.55rem}
+.ent-card.is-blacklist{opacity:.7}
+.ent-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem}
+.ent-card-name{font-weight:600;font-size:.95rem;line-height:1.3;color:var(--txt)}
+.ent-card-meta{font-size:.76rem;color:var(--txt3)}
+.chip{display:inline-flex;align-items:center;gap:.3rem;background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:.25rem .65rem;font-size:.72rem;color:var(--txt2)}
+.ent-card-succ{display:flex;flex-wrap:wrap;gap:.35rem}
+.ent-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .65rem;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.ent-badge.normale{background:#00E09615;color:var(--green)}
+.ent-badge.partenaire{background:#1A4A8A22;color:#6FA8FF}
+.ent-badge.quota{background:var(--gold-dim);color:var(--gold)}
+.ent-badge.blacklist{background:#FF5C5C15;color:var(--red)}
+
+/* ===== MODAL (generique) ===== */
+.modal-overlay{position:fixed;inset:0;background:#00000070;z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:var(--r3);padding:1.75rem;width:100%;max-width:460px;box-shadow:0 32px 80px #00000060;animation:fadeUp .3s ease both}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.modal-head h3{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--txt)}
+.modal-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--txt3);transition:color .15s}
+.modal-close:hover{color:var(--red)}
+.modal-actions{display:flex;gap:.75rem;margin-top:1.5rem;justify-content:flex-end}
+.btn-secondary{padding:.75rem 1.1rem;background:transparent;border:1px solid var(--border);color:var(--txt2);border-radius:var(--r2);font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{border-color:var(--txt2);color:var(--txt)}
+
+/* DOCUMENT LIST */
+.doc-list{display:flex;flex-direction:column;gap:.75rem}
+.doc-item{
+  display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;
+  background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);
+  transition:border-color .2s;
+}
+.doc-item:hover{border-color:var(--gold)}
+.doc-icon{font-size:1.5rem;width:40px;text-align:center}
+.doc-info{flex:1}
+.doc-name{font-weight:500;font-size:.9rem;margin-bottom:.2rem}
+.doc-meta{font-size:.78rem;color:var(--txt2)}
+.btn-dl{
+  background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold);
+  padding:.4rem .9rem;border-radius:8px;font-size:.78rem;font-weight:500;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;
+}
+.btn-dl:hover{background:var(--gold);color:var(--navy)}
+
+/* UPLOAD ZONE */
+.upload-zone{
+  border:2px dashed var(--border);border-radius:var(--r);padding:2rem;text-align:center;
+  cursor:pointer;transition:all .2s;
+}
+.upload-zone:hover{border-color:var(--gold);background:var(--gold-dim)}
+.upload-icon{font-size:2.5rem;margin-bottom:.75rem}
+.upload-text{font-size:.9rem;color:var(--txt2)}
+.upload-text span{color:var(--gold);font-weight:500}
+
+/* NOTIF DOT */
+.notif-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;display:inline-block;margin-left:4px;animation:pulse 2s infinite}
+
+/* ===================================================================
+   RESPONSIVE — PC / TABLETTE / TELEPHONE / TV
+   =================================================================== */
+.hb-btn{
+  display:none;background:none;border:1.5px solid var(--border);border-radius:var(--r2);
+  width:36px;height:36px;font-size:1.05rem;cursor:pointer;color:var(--txt);flex-shrink:0;margin-right:.5rem;
+}
+.sb-overlay{display:none;position:fixed;inset:0;background:#00000070;z-index:150}
+.sb-overlay.open{display:block}
+
+/* ---- TV / TRES GRAND ECRAN (>= 1600px) ---- */
+@media (min-width:1600px){
+  .content{padding:2.5rem 3rem}
+  .content > *{max-width:1400px;margin-left:auto;margin-right:auto}
+  html{font-size:17px}
+}
+
+/* ---- TABLETTE (<=1024px) ---- */
+@media (max-width:1024px){
+  .sidebar{width:210px}
+  .content{padding:1.5rem}
+  .ent-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+  .form-grid{grid-template-columns:1fr}
+}
+
+/* ---- TABLETTE / TELEPHONE (<=900px) : sidebar off-canvas ---- */
+@media (max-width:900px){
+  .hb-btn{display:flex;align-items:center;justify-content:center}
+  .sidebar{
+    position:fixed;top:0;left:0;height:100vh;width:260px;z-index:200;
+    transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 40px #00000060;
+  }
+  .sidebar.open{transform:translateX(0)}
+  .tb-title,.tb-badge{display:none}
+}
+
+/* ---- TELEPHONE (<=640px) ---- */
+@media (max-width:640px){
+  .content{padding:1rem}
+  .page-header{flex-direction:column;align-items:flex-start;gap:.6rem}
+  .ent-grid{grid-template-columns:1fr}
+  .topbar{padding:0 1rem}
+  .ac-suggestions{max-height:170px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="logo-wrap">
+      <div class="logo-icon">🎓</div>
+      <div class="logo-text">
+        <h1>ALS</h1>
+        <span>Espace Étudiant · UCAC/ICY</span>
+      </div>
+    </div>
+    <h2 class="login-title">Connexion</h2>
+    <p class="login-sub">Accédez à votre espace de gestion de stage</p>
+    <div class="field">
+      <label>Matricule ou Email</label>
+      <input type="text" placeholder="ex : 21G0042 ou prenom.nom@ucac.cm" id="login-id">
+    </div>
+    <div class="field">
+      <label>Mot de passe</label>
+      <input type="password" placeholder="••••••••" id="login-pw">
+      <div style="text-align:right;margin-top:.5rem">
+        <a href="#" onclick="resetMdpOublieModal();openModal('modal-mdp-oublie');return false" style="font-size:.78rem;color:var(--txt3);text-decoration:underline">Mot de passe oublié ?</a>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Se connecter</button>
+    <p class="login-footer">Compte non activé ? <a href="#">Contacter le BDS</a></p>
+  </div>
+</div>
+
+<!-- MOT DE PASSE OUBLIE (avant connexion) -->
+<div class="modal-overlay" id="modal-mdp-oublie" onclick="closeModal(event,'modal-mdp-oublie')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <h3>Mot de passe oublié</h3>
+      <button class="modal-close" onclick="closeModal(null,'modal-mdp-oublie')">✕</button>
+    </div>
+    <div id="mdp-oublie-form">
+      <p style="font-size:.85rem;color:var(--txt2);margin-bottom:1rem">Saisissez votre matricule ou votre email. Un lien de réinitialisation valable 1 heure sera envoyé à l'adresse enregistrée dans votre dossier.</p>
+      <div class="field">
+        <label>Matricule ou Email</label>
+        <input type="text" placeholder="ex : 21G0042 ou prenom.nom@ucac.cm" id="mdp-oublie-id">
+      </div>
+      <p style="font-size:.74rem;color:var(--txt3);margin-top:.5rem">Vous n'avez plus accès à cette boîte mail ? Contactez le Bureau des Stages.</p>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeModal(null,'modal-mdp-oublie')">Annuler</button>
+        <button class="btn-primary" style="width:auto;margin-top:0" onclick="envoyerLienReinit()">📧 Envoyer le lien</button>
+      </div>
+    </div>
+    <div id="mdp-oublie-confirmation" style="display:none;text-align:center;padding:1rem 0">
+      <div style="font-size:2.5rem;margin-bottom:.75rem">✅</div>
+      <p style="font-weight:600;margin-bottom:.4rem;color:var(--txt)">Email envoyé</p>
+      <p style="font-size:.85rem;color:var(--txt2)">Si un compte correspond à ces informations, un lien de réinitialisation vient d'être envoyé. Vérifiez également vos courriers indésirables.</p>
+      <div class="modal-actions" style="justify-content:center">
+        <button class="btn-secondary" onclick="closeModal(null,'modal-mdp-oublie')">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="hb-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+      <div class="tb-logo">🎓</div>
+      <span class="tb-title">ALS</span>
+      <span class="tb-badge">ÉTUDIANT</span>
+    </div>
+    <div class="tb-right">
+      <div class="avatar" title="MBALLA Jean-Pierre">SE</div>
+      <button class="btn-logout" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <div class="sb-overlay" id="sb-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+      <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">🏠</span>Tableau de bord</div>
+      <div class="nav-item" onclick="showPage('demande',this)"><span class="nav-icon">✉️</span>Demander une lettre<span class="nav-badge">!</span></div>
+      <div class="nav-item" onclick="showPage('entreprises',this)"><span class="nav-icon">🏢</span>Entreprises</div>
+      <div class="nav-item" onclick="showPage('dossier',this)"><span class="nav-icon">📁</span>Mon dossier</div>
+      <div class="nav-item" onclick="showPage('documents',this)"><span class="nav-icon">📄</span>Mes documents</div>
+      <div class="nav-label">Infos</div>
+      <div class="nav-item" onclick="showPage('profil',this)"><span class="nav-icon">👤</span>Mon profil</div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <h2>Bonjour, Sylvain 👋</h2>
+          <p>Voici l'état de votre stage académique — LIG3 · 2025–2026</p>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-icon gold">📬</div><div><div class="stat-label">Lettres générées</div><div class="stat-val">2</div></div></div>
+          <div class="stat-card"><div class="stat-icon teal">📋</div><div><div class="stat-label">Statut du stage</div><div class="stat-val" style="font-size:1rem;margin-top:.2rem"><span class="badge normal">● Normal</span></div></div></div>
+          <div class="stat-card"><div class="stat-icon gold">⏳</div><div><div class="stat-label">Jours restants</div><div class="stat-val">18</div></div></div>
+          <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-label">Documents soumis</div><div class="stat-val">2 / 5</div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Avancement du stage</div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="tl-dot done">✓</div>
+              <div class="tl-content"><div class="tl-title">Lettre de recommandation reçue</div><div class="tl-desc">Lettre générée pour TOTAL Cameroun</div><div class="tl-date">📅 12 mars 2026</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="tl-dot done">✓</div>
+              <div class="tl-content"><div class="tl-title">Convention de stage déposée</div><div class="tl-desc">Signée par l'entreprise et l'établissement</div><div class="tl-date">📅 18 mars 2026</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="tl-dot active">◉</div>
+              <div class="tl-content"><div class="tl-title">Stage en cours</div><div class="tl-desc">TOTAL Cameroun · Département Finance</div><div class="tl-date">📅 Du 18 mars au 18 juin 2026</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="tl-dot pending">○</div>
+              <div class="tl-content"><div class="tl-title">Dépôt des documents de fin</div><div class="tl-desc">Rapport, fiche d'appréciation, fiche d'auto-notation</div><div class="tl-date">⏰ Avant le 2 juillet 2026</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="tl-dot pending">○</div>
+              <div class="tl-content"><div class="tl-title">Soutenance</div><div class="tl-desc">Date à confirmer par le BDS</div><div class="tl-date">—</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMANDE LETTRE -->
+      <div class="page" id="page-demande">
+        <div class="page-header">
+          <h2>Demander une lettre ✉️</h2>
+          <p>Votre lettre sera générée et envoyée par email en moins de 5 minutes</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Informations de la demande</div>
+          <div class="form-grid">
+            <div class="full" style="position:relative">
+              <label class="form-label">Nom de l'entreprise</label>
+              <input class="form-input" type="text" placeholder="Commencez à taper le nom de l'entreprise..." id="f-entreprise" oninput="rechercherEntreprise()" autocomplete="off">
+              <div id="f-entreprise-suggestions" class="ac-suggestions"></div>
+              <p style="font-size:.76rem;color:var(--txt3);margin-top:.4rem">
+                Vous ne trouvez pas l'entreprise&nbsp;? <a href="#" onclick="showPage('entreprises',document.querySelectorAll('.nav-item')[2]);return false" style="color:var(--gold)">Parcourez le répertoire complet</a> ou continuez à taper pour créer une nouvelle fiche.
+              </p>
+            </div>
+            <div>
+              <label class="form-label">Ville du stage</label>
+              <input class="form-input" type="text" placeholder="ex : Yaoundé" id="f-ville" list="f-ville-datalist" oninput="onVilleChange()">
+              <datalist id="f-ville-datalist"></datalist>
+            </div>
+            <div>
+              <label class="form-label">Siège social</label>
+              <input class="form-input" type="text" placeholder="Rempli automatiquement si connu" id="f-siege">
+            </div>
+            <div>
+              <label class="form-label">Fonction du responsable à contacter</label>
+              <select class="form-select" id="f-fonction-select" onchange="onFonctionChange()">
+                <option value="">— Sélectionner —</option>
+                <option>Directeur Général</option>
+                <option>Secrétaire Générale</option>
+                <option>Directeur des Ressources Humaines</option>
+                <option value="AUTRE">Autre (préciser)</option>
+              </select>
+              <input class="form-input" type="text" placeholder="Précisez la fonction" id="f-fonction-autre" style="display:none;margin-top:.6rem">
+            </div>
+            <div>
+              <label class="form-label">Pays</label>
+              <select class="form-select" id="f-pays">
+                <option>Cameroun</option>
+                <option>Côte d'Ivoire</option>
+                <option>Sénégal</option>
+                <option>Gabon</option>
+                <option>France</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Période souhaitée</label>
+              <select class="form-select" id="f-periode">
+                <option>Mars — Juin 2026</option>
+                <option>Avril — Juillet 2026</option>
+                <option>Juin — Septembre 2026</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="alert" id="alert-validation-requise" style="display:none;background:#F5A62315;border:1px solid #F5A62340;color:var(--gold);margin-top:1.25rem">
+            ⏳ Cette entreprise ou cette fonction n'est pas encore vérifiée dans notre référentiel. Votre demande sera examinée par le Bureau des Stages avant envoi — réponse sous 48h maximum. Vous serez notifié par email et sur la plateforme.
+          </div>
+
+          <div style="margin-top:1.5rem">
+            <button class="btn-send" onclick="envoyerDemande()">📨 Envoyer la demande</button>
+          </div>
+          <div class="alert success" id="alert-demande">
+            ✅ Demande envoyée ! Votre lettre sera dans votre boîte mail dans moins de 5 minutes.
+          </div>
+        </div>
+      </div>
+
+      <!-- ENTREPRISES (repertoire, lecture seule) -->
+      <div class="page" id="page-entreprises">
+        <div class="page-header">
+          <h2>Répertoire des entreprises 🏢</h2>
+          <p>Consultez les entreprises déjà connues du Bureau des Stages avant de faire votre demande</p>
+        </div>
+        <div class="card">
+          <input class="form-input" type="text" id="ent-search-etu" placeholder="🔍 Rechercher une entreprise par nom..." oninput="renderEntreprisesEtudiant()" style="margin-bottom:0">
+        </div>
+        <div id="ent-grid-etu" class="ent-grid"></div>
+      </div>
+
+      <!-- DOSSIER -->
+      <div class="page" id="page-dossier">
+        <div class="page-header">
+          <h2>Mon dossier de stage 📁</h2>
+          <p>Gérez l'ensemble de vos documents de stage</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Début de stage — à déposer sous 2 semaines</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+            <div>
+              <label class="form-label">Convention de stage (PDF signé)</label>
+              <div class="upload-zone" onclick="this.querySelector('input').click()">
+                <div class="upload-icon">📋</div>
+                <div class="upload-text">Glissez ou <span>choisissez</span> votre fichier</div>
+                <input type="file" style="display:none" accept=".pdf">
+              </div>
+            </div>
+            <div>
+              <label class="form-label">Lien de localisation de l'entreprise</label>
+              <input class="form-input" type="url" placeholder="https://maps.google.com/..." style="margin-top:0">
+              <p style="font-size:.75rem;color:var(--txt2);margin-top:.4rem">Google Maps, Waze, Apple Maps...</p>
+            </div>
+          </div>
+          <button class="btn-send" style="padding:.7rem 1.5rem;font-size:.85rem">💾 Enregistrer le début de stage</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Fin de stage — à déposer sous 2 semaines après la fin</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div>
+              <label class="form-label">Rapport de stage (PDF signé)</label>
+              <div class="upload-zone"><div class="upload-icon">📄</div><div class="upload-text">Déposer le rapport</div></div>
+            </div>
+            <div>
+              <label class="form-label">Fiche d'appréciation (PDF)</label>
+              <div class="upload-zone"><div class="upload-icon">📝</div><div class="upload-text">Déposer la fiche</div></div>
+            </div>
+            <div class="full" style="grid-column:1/-1">
+              <label class="form-label">Fiche d'auto-notation</label>
+              <div class="upload-zone"><div class="upload-icon">⭐</div><div class="upload-text">Déposer la fiche d'auto-notation</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCUMENTS -->
+      <div class="page" id="page-documents">
+        <div class="page-header">
+          <h2>Mes documents 📄</h2>
+          <p>Tous vos documents générés et archivés</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Documents disponibles</div>
+          <div class="doc-list">
+            <div class="doc-item">
+              <div class="doc-icon">📩</div>
+              <div class="doc-info">
+                <div class="doc-name">Lettre de recommandation — TOTAL Cameroun</div>
+                <div class="doc-meta">Générée le 12 mars 2026 · Réf. ALS-2026-LIG3-00214</div>
+              </div>
+              <span class="badge complet">Valide</span>
+              <button class="btn-dl">⬇ Télécharger</button>
+            </div>
+            <div class="doc-item">
+              <div class="doc-icon">📋</div>
+              <div class="doc-info">
+                <div class="doc-name">Convention de stage signée</div>
+                <div class="doc-meta">Déposée le 18 mars 2026</div>
+              </div>
+              <span class="badge complet">Validé</span>
+              <button class="btn-dl">⬇ Télécharger</button>
+            </div>
+            <div class="doc-item">
+              <div class="doc-icon">📄</div>
+              <div class="doc-info">
+                <div class="doc-name">Rapport de stage</div>
+                <div class="doc-meta">À déposer avant le 2 juillet 2026</div>
+              </div>
+              <span class="badge attente">En attente</span>
+              <button class="btn-dl" style="opacity:.4;cursor:not-allowed">⬇ Télécharger</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFIL -->
+      <div class="page" id="page-profil">
+        <div class="page-header">
+          <h2>Mon profil 👤</h2>
+          <p>Informations académiques</p>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem">
+            <div style="width:72px;height:72px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;color:var(--navy)">SE</div>
+            <div>
+              <div style="font-size:1.3rem;font-weight:600">Sylvain EMANE</div>
+              <div style="color:var(--txt2);font-size:.9rem">Matricule : 21G0042</div>
+              <span class="badge normal" style="margin-top:.4rem">LIG3 · FSSG</span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+            <div style="background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);padding:1rem">
+              <div style="font-size:.75rem;color:var(--txt2);margin-bottom:.3rem">Faculté</div>
+              <div style="font-weight:500">FSSG</div>
+            </div>
+            <div style="background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);padding:1rem">
+              <div style="font-size:.75rem;color:var(--txt2);margin-bottom:.3rem">Classe</div>
+              <div style="font-weight:500">Licence 3 Informatique de Gestion</div>
+            </div>
+            <div style="background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);padding:1rem">
+              <div style="font-size:.75rem;color:var(--txt2);margin-bottom:.3rem">Matricule académique</div>
+              <div style="font-weight:500">21G0042</div>
+            </div>
+            <div style="background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);padding:1rem">
+              <div style="font-size:.75rem;color:var(--txt2);margin-bottom:.3rem">Année académique</div>
+              <div style="font-weight:500">2025 – 2026</div>
+            </div>
+          </div>
+          <p style="font-size:.76rem;color:var(--txt3);margin-top:.9rem">Les informations académiques (faculté, classe, matricule) sont gérées par le Bureau des Stages et ne sont pas modifiables ici.</p>
+        </div>
+
+        <!-- MODIFICATION EMAIL -->
+        <div class="card">
+          <div class="card-title">✉️ Adresse email</div>
+          <div class="form-grid">
+            <div class="full">
+              <label class="form-label">Email de connexion</label>
+              <input class="form-input" type="email" id="profil-email" value="sylvainemane@ucac.cm">
+            </div>
+          </div>
+          <p style="font-size:.76rem;color:var(--txt3);margin-top:.5rem">Utilisée pour vous connecter et recevoir vos lettres et notifications. Un email de confirmation sera envoyé à l'ancienne et à la nouvelle adresse.</p>
+          <div style="margin-top:1rem"><button class="btn-primary" onclick="modifierEmail()">💾 Mettre à jour l'email</button></div>
+          <div class="alert success" id="alert-email-ok">✅ Email mis à jour avec succès.</div>
+        </div>
+
+        <!-- MODIFICATION MOT DE PASSE -->
+        <div class="card">
+          <div class="card-title">🔒 Mot de passe</div>
+          <div class="form-grid">
+            <div class="full"><label class="form-label">Mot de passe actuel</label><input class="form-input" type="password" id="profil-pw-actuel" placeholder="••••••••"></div>
+            <div><label class="form-label">Nouveau mot de passe</label><input class="form-input" type="password" id="profil-pw-nouveau" placeholder="10 caractères minimum"></div>
+            <div><label class="form-label">Confirmer le nouveau mot de passe</label><input class="form-input" type="password" id="profil-pw-confirm" placeholder="10 caractères minimum"></div>
+          </div>
+          <div style="margin-top:1rem"><button class="btn-primary" onclick="modifierMotDePasse()">💾 Changer le mot de passe</button></div>
+          <div class="alert success" id="alert-pw-ok">✅ Mot de passe modifié avec succès.</div>
+          <div class="alert" id="alert-pw-err" style="background:#FF5C5C15;border:1px solid #FF5C5C40;color:var(--red)"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// MODAL (generique)
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(e,id){
+  if(!e||e.target===document.getElementById(id))
+    document.getElementById(id).classList.remove('open');
+}
+
+// MOT DE PASSE OUBLIE
+function resetMdpOublieModal(){
+  document.getElementById('mdp-oublie-form').style.display='block';
+  document.getElementById('mdp-oublie-confirmation').style.display='none';
+  document.getElementById('mdp-oublie-id').value='';
+}
+function envoyerLienReinit(){
+  const id=document.getElementById('mdp-oublie-id').value.trim();
+  if(!id){alert('Veuillez saisir votre matricule ou votre email.');return;}
+  document.getElementById('mdp-oublie-form').style.display='none';
+  document.getElementById('mdp-oublie-confirmation').style.display='block';
+}
+
+function doLogin(){
+  const id=document.getElementById('login-id').value;
+  const pw=document.getElementById('login-pw').value;
+  if(!id||!pw){alert('Veuillez remplir tous les champs.');return;}
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').classList.add('visible');
+  renderEntreprisesEtudiant();
+}
+function doLogout(){
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('login-screen').style.display='flex';
+}
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sb-overlay').classList.remove('open');
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sb-overlay').classList.toggle('open');
+}
+
+// ===== PROFIL : MODIFICATION EMAIL / MOT DE PASSE =====
+function modifierEmail(){
+  const email=document.getElementById('profil-email').value.trim();
+  if(!email || !email.includes('@')){alert('Veuillez saisir une adresse email valide.');return;}
+  const a=document.getElementById('alert-email-ok');
+  a.classList.add('show');
+  setTimeout(()=>a.classList.remove('show'),4000);
+}
+
+function modifierMotDePasse(){
+  const actuel=document.getElementById('profil-pw-actuel').value;
+  const nouveau=document.getElementById('profil-pw-nouveau').value;
+  const confirm=document.getElementById('profil-pw-confirm').value;
+  const err=document.getElementById('alert-pw-err');
+  const ok=document.getElementById('alert-pw-ok');
+  err.classList.remove('show');ok.classList.remove('show');
+
+  if(!actuel||!nouveau||!confirm){
+    err.textContent='⚠️ Veuillez remplir les trois champs.';err.classList.add('show');return;
+  }
+  if(nouveau.length<10){
+    err.textContent='⚠️ Le nouveau mot de passe doit contenir au moins 10 caractères.';err.classList.add('show');return;
+  }
+  if(nouveau!==confirm){
+    err.textContent='⚠️ La confirmation ne correspond pas au nouveau mot de passe.';err.classList.add('show');return;
+  }
+  ok.classList.add('show');
+  setTimeout(()=>ok.classList.remove('show'),4000);
+  document.getElementById('profil-pw-actuel').value='';
+  document.getElementById('profil-pw-nouveau').value='';
+  document.getElementById('profil-pw-confirm').value='';
+}
+// ===== REPERTOIRE ENTREPRISES (donnees de demo, memes entreprises que cote BDS) =====
+let mockEntreprises=[
+  {id:1,nom:"Societe Anonyme des Boissons du Cameroun (SABC)",forme:"SA",siege:"Douala",
+   destinataire:"Monsieur le Directeur Général",statut:"PARTENAIRE",placesTot:0,placesUse:0,
+   succursales:[{ville:"Douala",fonction:"Directeur Régional du Littoral"},{ville:"Yaoundé",fonction:"Directeur Régional du Centre"}]},
+  {id:2,nom:"MTN Cameroun",forme:"SA",siege:"Douala",
+   destinataire:"Monsieur le Directeur Général",statut:"PARTENAIRE",placesTot:0,placesUse:0,
+   succursales:[{ville:"Yaoundé",fonction:"Responsable RH Centre"}]},
+  {id:3,nom:"CNPS",forme:"Etablissement public",siege:"Yaoundé",
+   destinataire:"Monsieur le Directeur Général",statut:"QUOTA",placesTot:15,placesUse:11,succursales:[]},
+  {id:4,nom:"TOTAL Cameroun",forme:"SA",siege:"Douala",
+   destinataire:"Monsieur le Directeur Général",statut:"NORMALE",placesTot:0,placesUse:0,succursales:[]},
+  {id:5,nom:"MINFIN",forme:"Administration publique",siege:"Yaoundé",
+   destinataire:"",statut:"LISTE_NOIRE",placesTot:0,placesUse:0,succursales:[]},
+];
+
+let entrepriseSelectionnee=null; // entreprise choisie via l'autocompletion, ou null si saisie libre
+let fonctionModifiee=false;
+
+function badgeInfoEtu(statut){
+  switch(statut){
+    case "PARTENAIRE": return {cls:"partenaire",label:"🤝 Partenaire"};
+    case "QUOTA": return {cls:"quota",label:"🎯 Places gérées par le BDS"};
+    case "LISTE_NOIRE": return {cls:"blacklist",label:"⛔ Indisponible"};
+    default: return {cls:"normale",label:"✅ Disponible"};
+  }
+}
+
+function renderEntreprisesEtudiant(){
+  const grid=document.getElementById('ent-grid-etu');
+  if(!grid)return;
+  const q=(document.getElementById('ent-search-etu')?.value||'').toLowerCase();
+  grid.innerHTML='';
+  const filtrees=mockEntreprises.filter(e=>e.nom.toLowerCase().includes(q));
+  if(!filtrees.length){grid.innerHTML='<p style="color:var(--txt3);padding:1rem">Aucune entreprise ne correspond à cette recherche.</p>';return;}
+  filtrees.forEach(e=>{
+    const b=badgeInfoEtu(e.statut);
+    const card=document.createElement('div');
+    card.className='ent-card'+(e.statut==='LISTE_NOIRE'?' is-blacklist':'');
+    const succHtml=e.succursales.length
+      ? `<div class="ent-card-succ">${e.succursales.map(s=>`<span class="chip">${s.ville}</span>`).join('')}</div>`
+      : '';
+    let noteHtml='';
+    if(e.statut==='QUOTA') noteHtml=`<div class="ent-card-meta">Affectation directe par le Bureau des Stages, hors demande directe.</div>`;
+    if(e.statut==='LISTE_NOIRE') noteHtml=`<div class="ent-card-meta">Aucune demande de lettre possible vers cette entreprise.</div>`;
+    card.innerHTML=`
+      <div class="ent-card-head">
+        <div><div class="ent-card-name">${e.nom}</div><div class="ent-card-meta">${e.forme||'—'} · Siège : ${e.siege||'—'}</div></div>
+        <span class="ent-badge ${b.cls}">${b.label}</span>
+      </div>
+      ${noteHtml}
+      ${succHtml}
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ===== AUTOCOMPLETION ENTREPRISE (formulaire de demande) =====
+function rechercherEntreprise(){
+  const val=document.getElementById('f-entreprise').value.trim();
+  const box=document.getElementById('f-entreprise-suggestions');
+  entrepriseSelectionnee=null;
+  if(val.length<2){box.classList.remove('show');box.innerHTML='';return;}
+  const q=val.toLowerCase();
+  const dispo=mockEntreprises.filter(e=>e.statut!=='LISTE_NOIRE' && e.nom.toLowerCase().includes(q));
+  box.innerHTML='';
+  if(dispo.length){
+    dispo.slice(0,6).forEach(e=>{
+      const it=document.createElement('div');
+      it.className='ac-item';
+      it.innerHTML=`${e.nom}<div class="ac-sub">Siège : ${e.siege||'—'}</div>`;
+      it.onclick=()=>selectionnerEntreprise(e);
+      box.appendChild(it);
+    });
+  }else{
+    box.innerHTML='<div class="ac-empty">Aucune entreprise connue avec ce nom — elle sera créée comme nouvelle fiche, à vérifier par le BDS.</div>';
+  }
+  box.classList.add('show');
+}
+
+function selectionnerEntreprise(e){
+  entrepriseSelectionnee=e;
+  document.getElementById('f-entreprise').value=e.nom;
+  document.getElementById('f-entreprise-suggestions').classList.remove('show');
+  document.getElementById('f-siege').value=e.siege||'';
+
+  // Remplissage de la fonction par defaut si connue
+  const sel=document.getElementById('f-fonction-select');
+  if(e.destinataire){
+    let found=false;
+    for(const opt of sel.options){ if(opt.value===e.destinataire){opt.selected=true;found=true;} }
+    if(!found){sel.value='';}
+  }
+  fonctionModifiee=false;
+
+  // Villes connues (succursales) proposees dans le datalist
+  const dl=document.getElementById('f-ville-datalist');
+  dl.innerHTML='';
+  e.succursales.forEach(s=>{
+    const o=document.createElement('option');
+    o.value=s.ville;
+    dl.appendChild(o);
+  });
+  document.getElementById('f-ville').value='';
+  majAlerteValidation();
+}
+
+function onVilleChange(){
+  if(!entrepriseSelectionnee){majAlerteValidation();return;}
+  const ville=document.getElementById('f-ville').value.trim();
+  const succ=entrepriseSelectionnee.succursales.find(s=>s.ville.toLowerCase()===ville.toLowerCase());
+  const sel=document.getElementById('f-fonction-select');
+  if(succ){
+    for(const opt of sel.options){ opt.selected = (opt.value===succ.fonction); }
+    fonctionModifiee=false;
+  }
+  majAlerteValidation();
+}
+
+function onFonctionChange(){
+  const sel=document.getElementById('f-fonction-select');
+  const autre=document.getElementById('f-fonction-autre');
+  autre.style.display = sel.value==='AUTRE' ? 'block' : 'none';
+  fonctionModifiee=true; // toute intervention manuelle de l'etudiant sur ce champ compte comme une modification
+  majAlerteValidation();
+}
+
+function majAlerteValidation(){
+  const box=document.getElementById('alert-validation-requise');
+  const necessiteValidation = (!entrepriseSelectionnee) || fonctionModifiee;
+  box.style.display = necessiteValidation ? 'flex' : 'none';
+}
+
+function envoyerDemande(){
+  const e=document.getElementById('f-entreprise').value;
+  if(!e){alert('Veuillez saisir le nom de l\'entreprise.');return;}
+  const necessiteValidation = (!entrepriseSelectionnee) || fonctionModifiee;
+  const a=document.getElementById('alert-demande');
+  a.textContent = necessiteValidation
+    ? '⏳ Demande envoyée au Bureau des Stages pour vérification. Réponse sous 48h maximum, vous serez notifié.'
+    : '✅ Demande envoyée ! Votre lettre sera dans votre boîte mail dans moins de 5 minutes.';
+  a.classList.add('show');
+  setTimeout(()=>a.classList.remove('show'),6000);
+}
+
+// Fermer les suggestions si on clique ailleurs
+document.addEventListener('click',function(ev){
+  const box=document.getElementById('f-entreprise-suggestions');
+  const input=document.getElementById('f-entreprise');
+  if(box && !box.contains(ev.target) && ev.target!==input) box.classList.remove('show');
+});
+</script>
+</body>
+</html>
