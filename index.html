@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALS — Espace Étudiant</title>
+<title>ALS - Espace Étudiant</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --navy:#0B1628;--navy2:#142038;--navy3:#1E2F4D;
+  --bg:#0B1628;--bg2:#142038;
   --gold:#F5A623;--gold2:#FFB83F;--gold-dim:#F5A62322;
   --teal:#00C9A7;--teal-dim:#00C9A715;
   --red:#FF5C5C;--green:#00E096;
@@ -18,13 +19,39 @@
   --r:14px;--r2:10px;--r3:20px;
   --shadow:0 4px 24px #00000040;
 }
-html{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--txt);min-height:100vh}
+
+/* ===== MODE CLAIR =====
+   Seuls les fonds/textes/surfaces changent. --navy reste une couleur
+   fixe (utilisee comme texte fonce sur les boutons dores) et n'est
+   jamais redefinie ici. Les couleurs de statut (or, sarcelle, rouge,
+   vert) restent identiques dans les deux modes : coherence lexicale
+   (Shneiderman, regle 1) et repere stable pour l'usager qui bascule. */
+[data-theme="light"]{
+  --bg:#FAF7F0;--bg2:#F1ECE0;
+  --gold-dim:#F5A62328;
+  --teal-dim:#00C9A722;
+  --txt:#1A1208;--txt2:#4A4033;--txt3:#8A7D6B;
+  --card:#FFFDF7;--card2:#F2EFE6;
+  --border:#DDD8CC;
+  --shadow:0 4px 24px #1A120818;
+}
+html,body,.sidebar,.card,input,select,textarea,.modal{
+  transition:background-color .18s ease,color .18s ease,border-color .18s ease;
+}
+.theme-toggle{
+  width:38px;height:38px;border-radius:50%;border:1.5px solid var(--border);
+  background:var(--card2);font-size:1.05rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:background .18s ease,border-color .18s ease,transform .15s ease;
+}
+.theme-toggle:hover{border-color:var(--gold);transform:scale(1.06)}
+html{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
 body{min-height:100vh}
 
 /* ===== LOGIN ===== */
 #login-screen{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(ellipse 80% 60% at 50% 0%,#1E3A5F 0%,var(--navy) 70%);
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,#1E3A5F 0%,var(--bg) 70%);
   padding:2rem;
 }
 .login-card{
@@ -49,7 +76,7 @@ body{min-height:100vh}
 .field{margin-bottom:1.2rem}
 .field label{display:block;font-size:.8rem;font-weight:500;color:var(--txt2);margin-bottom:.5rem;letter-spacing:.03em;text-transform:uppercase}
 .field input{
-  width:100%;background:var(--navy2);border:1px solid var(--border);
+  width:100%;background:var(--bg2);border:1px solid var(--border);
   border-radius:var(--r2);padding:.85rem 1rem;color:var(--txt);
   font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;
   transition:border-color .2s,box-shadow .2s;
@@ -117,7 +144,7 @@ body{min-height:100vh}
 .nav-badge{margin-left:auto;background:var(--gold);color:var(--navy);font-size:.65rem;font-weight:700;padding:.15rem .45rem;border-radius:20px}
 
 /* CONTENT */
-.content{flex:1;overflow-y:auto;padding:2rem;background:var(--navy)}
+.content{flex:1;overflow-y:auto;padding:2rem;background:var(--bg)}
 .page{display:none;animation:fadeUp .4s ease both}
 .page.active{display:block}
 
@@ -177,14 +204,14 @@ body{min-height:100vh}
 .form-grid .full{grid-column:1/-1}
 .form-label{display:block;font-size:.8rem;font-weight:500;color:var(--txt2);margin-bottom:.5rem;letter-spacing:.03em;text-transform:uppercase}
 .form-input,.form-select{
-  width:100%;background:var(--navy2);border:1px solid var(--border);
+  width:100%;background:var(--bg2);border:1px solid var(--border);
   border-radius:var(--r2);padding:.8rem 1rem;color:var(--txt);
   font-family:'DM Sans',sans-serif;font-size:.92rem;outline:none;
   transition:border-color .2s,box-shadow .2s;
 }
 .form-input:focus,.form-select:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
 .form-select{cursor:pointer}
-.form-select option{background:var(--navy2);color:var(--txt)}
+.form-select option{background:var(--bg2);color:var(--txt)}
 .btn-send{
   display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;
   background:var(--gold);color:var(--navy);border:none;border-radius:var(--r2);
@@ -269,7 +296,7 @@ body{min-height:100vh}
 .notif-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;display:inline-block;margin-left:4px;animation:pulse 2s infinite}
 
 /* ===================================================================
-   RESPONSIVE — PC / TABLETTE / TELEPHONE / TV
+   RESPONSIVE (PC / TABLETTE / TELEPHONE / TV)
    =================================================================== */
 .hb-btn{
   display:none;background:none;border:1.5px solid var(--border);border-radius:var(--r2);
@@ -312,6 +339,162 @@ body{min-height:100vh}
   .topbar{padding:0 1rem}
   .ac-suggestions{max-height:170px}
 }
+
+/* ==========================================================================
+   PERIODE IMPOSEE, ETAT BLOQUE ET DEPOT DES DOCUMENTS
+   ==========================================================================
+   Composants ajoutes cote etudiant. Aucune couleur en dur : tout passe par
+   les variables deja definies, pour que le theme clair reste correct.
+   ========================================================================== */
+
+/* ----- Variantes d'alerte manquantes ----- */
+.alert.warn{background:var(--gold-dim);border:1px solid var(--gold);color:var(--gold);display:flex}
+.alert.stop{background:#FF5C5C15;border:1px solid var(--red);color:var(--red);display:flex}
+.alert.info{background:var(--card2);border:1px solid var(--border);color:var(--txt2);display:flex}
+.alert-corps{flex:1;min-width:0}
+.alert strong{display:block;margin-bottom:.2rem}
+.alert .alert-detail{font-size:.83rem;opacity:.92;line-height:1.55;font-weight:400}
+
+/* ----- Encart de la periode imposee ----- */
+.periode-encart{
+  background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);
+  padding:.9rem 1.1rem;margin-top:.5rem;
+}
+.periode-ligne{display:flex;justify-content:space-between;gap:1rem;font-size:.84rem;padding:.25rem 0}
+.periode-ligne dt{color:var(--txt3)}
+.periode-ligne dd{color:var(--txt);font-weight:500;text-align:right}
+.periode-source{
+  font-size:.75rem;color:var(--txt3);margin-top:.6rem;padding-top:.6rem;
+  border-top:1px solid var(--border);line-height:1.5;
+}
+.dates-libres{display:none;gap:1rem}
+.dates-libres.ouvert{display:grid;grid-template-columns:1fr 1fr}
+
+/* ----- Ecran bloque ----- */
+.bloc-vide{
+  text-align:center;padding:3rem 1.5rem;
+}
+.bloc-vide-icone{font-size:3rem;margin-bottom:1rem;opacity:.75}
+.bloc-vide h3{font-family:'DM Serif Display',serif;font-size:1.35rem;margin-bottom:.6rem;color:var(--txt)}
+.bloc-vide p{font-size:.9rem;color:var(--txt2);line-height:1.65;max-width:520px;margin:0 auto}
+
+/* ----- Etapes du dossier ----- */
+.etape{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  margin-bottom:1.25rem;overflow:hidden;
+}
+.etape.verrouillee{opacity:.62}
+.etape.en-retard{border-color:var(--red)}
+.etape-tete{
+  display:flex;align-items:flex-start;gap:1rem;padding:1.25rem 1.4rem;
+  border-bottom:1px solid var(--border);
+}
+.etape-num{
+  width:34px;height:34px;flex-shrink:0;border-radius:50%;
+  background:var(--card2);border:1px solid var(--border);color:var(--txt2);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;
+}
+.etape.faite .etape-num{background:#00E09615;border-color:var(--green);color:var(--green)}
+.etape.active .etape-num{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
+.etape-titre{flex:1;min-width:0}
+.etape-titre h3{font-size:1rem;font-weight:600;color:var(--txt);margin-bottom:.2rem}
+.etape-titre p{font-size:.82rem;color:var(--txt3);line-height:1.5}
+.etape-corps{padding:1.25rem 1.4rem}
+.etape-echeance{font-size:.8rem;font-weight:600;white-space:nowrap;flex-shrink:0}
+.etape-echeance.ok{color:var(--txt3)}
+.etape-echeance.proche{color:var(--gold)}
+.etape-echeance.depassee{color:var(--red)}
+
+/* ----- Ligne de document ----- */
+.depot{
+  display:flex;align-items:center;gap:1rem;padding:.9rem 1rem;
+  background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);
+  margin-bottom:.75rem;
+}
+.depot-icone{font-size:1.4rem;width:34px;text-align:center;flex-shrink:0}
+.depot-corps{flex:1;min-width:0}
+.depot-nom{font-size:.9rem;font-weight:500;color:var(--txt)}
+.depot-meta{font-size:.76rem;color:var(--txt3);margin-top:.15rem;line-height:1.45}
+.depot-actions{display:flex;gap:.5rem;align-items:center;flex-shrink:0}
+.depot-tentatives{font-size:.74rem;color:var(--txt2);white-space:nowrap}
+.depot-facultatif{font-size:.72rem;color:var(--txt3);font-style:italic}
+
+.btn-depot{
+  background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold);
+  padding:.45rem 1rem;border-radius:8px;font-size:.8rem;font-weight:500;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap;
+}
+.btn-depot:hover:not(:disabled){background:var(--gold);color:var(--navy)}
+.btn-depot:disabled{opacity:.4;cursor:not-allowed;border-color:var(--border);color:var(--txt3);background:transparent}
+.btn-depot.refaire{background:transparent;border-color:var(--txt3);color:var(--txt)}
+.btn-depot.refaire:hover{border-color:var(--gold);color:var(--gold);background:transparent}
+
+/* ----- Recapitulatif du stage ----- */
+.recap{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.9rem}
+.recap-case{background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);padding:.85rem 1rem}
+.recap-lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--txt3);font-weight:600;margin-bottom:.3rem}
+.recap-val{font-size:.92rem;color:var(--txt);font-weight:500}
+.recap-val.rouge{color:var(--red)}
+.recap-val.or{color:var(--gold)}
+
+.aide{font-size:.78rem;color:var(--txt3);line-height:1.55;margin-top:.7rem}
+.sans-marge{margin-bottom:0}
+
+/* ==========================================================================
+   ADAPTATION AUX ECRANS
+   ========================================================================== */
+@media (max-width:1024px){
+  .dates-libres.ouvert{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .etape-tete{flex-wrap:wrap}
+  .etape-echeance{width:100%;padding-left:calc(34px + 1rem)}
+  .depot{flex-wrap:wrap}
+  .depot-corps{flex:1 1 calc(100% - 50px)}
+  .depot-actions{width:100%;justify-content:flex-end;padding-top:.3rem}
+  .periode-ligne{flex-direction:column;gap:.1rem}
+  .periode-ligne dd{text-align:left}
+  .bloc-vide{padding:2rem 1rem}
+}
+
+
+/* ----- Panneau de demonstration, absent de la version livree ----- */
+.demo-lanceur{
+  position:fixed;right:1rem;bottom:1rem;z-index:400;
+  background:var(--card2);color:var(--txt2);border:1px solid var(--border);
+  border-radius:20px;padding:.5rem 1rem;font-size:.78rem;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;cursor:pointer;
+  font-family:'DM Sans',sans-serif;box-shadow:0 8px 28px #00000040;
+  transition:border-color .2s,color .2s;
+}
+.demo-lanceur:hover{border-color:var(--gold);color:var(--gold)}
+.demo-panneau{
+  position:fixed;right:1rem;bottom:1rem;z-index:401;width:min(340px,calc(100vw - 2rem));
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:1.1rem;box-shadow:0 20px 60px #00000060;display:none;
+}
+.demo-panneau.ouvert{display:block}
+.demo-tete{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.4rem}
+.demo-tete strong{font-size:.92rem;color:var(--txt)}
+.demo-fermer{background:none;border:none;color:var(--txt3);font-size:1rem;cursor:pointer;line-height:1}
+.demo-fermer:hover{color:var(--red)}
+.demo-note{font-size:.74rem;color:var(--txt3);line-height:1.5;margin-bottom:.85rem}
+.demo-choix{
+  display:block;width:100%;text-align:left;margin-bottom:.45rem;
+  background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);
+  padding:.6rem .8rem;cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:border-color .15s;
+}
+.demo-choix:hover{border-color:var(--gold)}
+.demo-choix.actif{border-color:var(--gold);background:var(--gold-dim)}
+.demo-choix-nom{font-size:.84rem;font-weight:600;color:var(--txt)}
+.demo-choix-cas{font-size:.73rem;color:var(--txt3);margin-top:.15rem;line-height:1.45}
+.demo-choix.actif .demo-choix-nom{color:var(--gold)}
+@media (max-width:640px){
+  .demo-lanceur{right:.75rem;bottom:.75rem;padding:.45rem .85rem;font-size:.72rem}
+  .demo-panneau{right:.75rem;left:.75rem;bottom:.75rem;width:auto}
+}
+
 </style>
 </head>
 <body>
@@ -385,7 +568,8 @@ body{min-height:100vh}
       <span class="tb-badge">ÉTUDIANT</span>
     </div>
     <div class="tb-right">
-      <div class="avatar" title="MBALLA Jean-Pierre">SE</div>
+      <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn" aria-label="Changer d'apparence" title="Mode clair">☀️</button>
+      <div class="avatar" id="tb-avatar" title="Étudiant">SE</div>
       <button class="btn-logout" onclick="doLogout()">Déconnexion</button>
     </div>
   </div>
@@ -407,48 +591,48 @@ body{min-height:100vh}
       <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
         <div class="page-header">
-          <h2>Bonjour, Sylvain 👋</h2>
-          <p>Voici l'état de votre stage académique — LIG3 · 2025–2026</p>
+          <h2 id="tb-bonjour">Bonjour 👋</h2>
+          <p id="tb-sous-titre">Voici l'état de votre stage académique</p>
         </div>
+        <div id="tb-etat"></div>
         <div class="stats-row">
-          <div class="stat-card"><div class="stat-icon gold">📬</div><div><div class="stat-label">Lettres générées</div><div class="stat-val">2</div></div></div>
-          <div class="stat-card"><div class="stat-icon teal">📋</div><div><div class="stat-label">Statut du stage</div><div class="stat-val" style="font-size:1rem;margin-top:.2rem"><span class="badge normal">● Normal</span></div></div></div>
-          <div class="stat-card"><div class="stat-icon gold">⏳</div><div><div class="stat-label">Jours restants</div><div class="stat-val">18</div></div></div>
-          <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-label">Documents soumis</div><div class="stat-val">2 / 5</div></div></div>
+          <div class="stat-card"><div class="stat-icon gold">📬</div><div><div class="stat-label">Lettres générées</div><div class="stat-val" id="tb-lettres">-</div></div></div>
+          <div class="stat-card"><div class="stat-icon teal">📋</div><div><div class="stat-label">Statut du stage</div><div class="stat-val" style="font-size:1rem;margin-top:.2rem" id="tb-statut"></div></div></div>
+          <div class="stat-card"><div class="stat-icon gold">⏳</div><div><div class="stat-label">Jours avant dépôt</div><div class="stat-val" id="tb-jours">-</div></div></div>
+          <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-label">Documents déposés</div><div class="stat-val" id="tb-docs">-</div></div></div>
         </div>
         <div class="card">
           <div class="card-title">Avancement du stage</div>
-          <div class="timeline">
-            <div class="timeline-item">
-              <div class="tl-dot done">✓</div>
-              <div class="tl-content"><div class="tl-title">Lettre de recommandation reçue</div><div class="tl-desc">Lettre générée pour TOTAL Cameroun</div><div class="tl-date">📅 12 mars 2026</div></div>
-            </div>
-            <div class="timeline-item">
-              <div class="tl-dot done">✓</div>
-              <div class="tl-content"><div class="tl-title">Convention de stage déposée</div><div class="tl-desc">Signée par l'entreprise et l'établissement</div><div class="tl-date">📅 18 mars 2026</div></div>
-            </div>
-            <div class="timeline-item">
-              <div class="tl-dot active">◉</div>
-              <div class="tl-content"><div class="tl-title">Stage en cours</div><div class="tl-desc">TOTAL Cameroun · Département Finance</div><div class="tl-date">📅 Du 18 mars au 18 juin 2026</div></div>
-            </div>
-            <div class="timeline-item">
-              <div class="tl-dot pending">○</div>
-              <div class="tl-content"><div class="tl-title">Dépôt des documents de fin</div><div class="tl-desc">Rapport, fiche d'appréciation, fiche d'auto-notation</div><div class="tl-date">⏰ Avant le 2 juillet 2026</div></div>
-            </div>
-            <div class="timeline-item">
-              <div class="tl-dot pending">○</div>
-              <div class="tl-content"><div class="tl-title">Soutenance</div><div class="tl-desc">Date à confirmer par le BDS</div><div class="tl-date">—</div></div>
-            </div>
-          </div>
+          <div class="timeline" id="tb-timeline"></div>
         </div>
       </div>
 
       <!-- DEMANDE LETTRE -->
+      <!-- ===================================================================
+           DEMANDE DE LETTRE
+           ===================================================================
+           La periode n'est plus un choix : elle est imposee par la regle du
+           niveau ou l'exception de la classe. L'entree « Autre » reste
+           ouverte, mais ALS dit tout de suite ce qu'elle entraine.
+           Une classe sans regle ni exception validee ne voit pas le
+           formulaire du tout.
+           =================================================================== -->
       <div class="page" id="page-demande">
         <div class="page-header">
           <h2>Demander une lettre ✉️</h2>
           <p>Votre lettre sera générée et envoyée par email en moins de 5 minutes</p>
         </div>
+
+        <!-- Classe sans planning : rien d'autre ne s'affiche -->
+        <div class="card" id="demande-bloquee" style="display:none">
+          <div class="bloc-vide">
+            <div class="bloc-vide-icone">⛔</div>
+            <h3 id="bloc-titre">Votre classe n'est pas encore prête</h3>
+            <p id="bloc-texte"></p>
+          </div>
+        </div>
+
+        <div id="demande-formulaire">
         <div class="card">
           <div class="card-title">Informations de la demande</div>
           <div class="form-grid">
@@ -457,7 +641,7 @@ body{min-height:100vh}
               <input class="form-input" type="text" placeholder="Commencez à taper le nom de l'entreprise..." id="f-entreprise" oninput="rechercherEntreprise()" autocomplete="off">
               <div id="f-entreprise-suggestions" class="ac-suggestions"></div>
               <p style="font-size:.76rem;color:var(--txt3);margin-top:.4rem">
-                Vous ne trouvez pas l'entreprise&nbsp;? <a href="#" onclick="showPage('entreprises',document.querySelectorAll('.nav-item')[2]);return false" style="color:var(--gold)">Parcourez le répertoire complet</a> ou continuez à taper pour créer une nouvelle fiche.
+                Vous ne trouvez pas l'entreprise&nbsp;? <a href="#" onclick="showPage('entreprises',null);return false" style="color:var(--gold)">Parcourez le répertoire complet</a> ou continuez à taper pour créer une nouvelle fiche.
               </p>
             </div>
             <div>
@@ -472,7 +656,7 @@ body{min-height:100vh}
             <div>
               <label class="form-label">Fonction du responsable à contacter</label>
               <select class="form-select" id="f-fonction-select" onchange="onFonctionChange()">
-                <option value="">— Sélectionner —</option>
+                <option value="">Sélectionner...</option>
                 <option>Directeur Général</option>
                 <option>Secrétaire Générale</option>
                 <option>Directeur des Ressources Humaines</option>
@@ -490,26 +674,58 @@ body{min-height:100vh}
                 <option>France</option>
               </select>
             </div>
-            <div>
-              <label class="form-label">Période souhaitée</label>
-              <select class="form-select" id="f-periode">
-                <option>Mars — Juin 2026</option>
-                <option>Avril — Juillet 2026</option>
-                <option>Juin — Septembre 2026</option>
-              </select>
+          </div>
+        </div>
+
+        <!-- ===== PERIODE ===== -->
+        <div class="card">
+          <div class="card-title">Période de stage</div>
+
+          <div class="form-grid">
+            <div class="full">
+              <label class="form-label">Période</label>
+              <select class="form-select" id="f-periode" onchange="onPeriodeChange()"></select>
             </div>
           </div>
 
-          <div class="alert" id="alert-validation-requise" style="display:none;background:#F5A62315;border:1px solid #F5A62340;color:var(--gold);margin-top:1.25rem">
-            ⏳ Cette entreprise ou cette fonction n'est pas encore vérifiée dans notre référentiel. Votre demande sera examinée par le Bureau des Stages avant envoi — réponse sous 48h maximum. Vous serez notifié par email et sur la plateforme.
+          <!-- Rappel de ce que la classe impose -->
+          <div class="periode-encart" id="periode-encart">
+            <dl id="periode-details"></dl>
+            <p class="periode-source" id="periode-source"></p>
           </div>
 
-          <div style="margin-top:1.5rem">
-            <button class="btn-send" onclick="envoyerDemande()">📨 Envoyer la demande</button>
+          <!-- Dates libres, ouvertes par « Autre » -->
+          <div class="dates-libres" id="dates-libres" style="margin-top:1rem">
+            <div>
+              <label class="form-label">Date de début souhaitée</label>
+              <input class="form-input" type="date" id="f-debut" onchange="onDatesLibres()">
+            </div>
+            <div>
+              <label class="form-label">Date de fin souhaitée</label>
+              <input class="form-input" type="date" id="f-fin" onchange="onDatesLibres()">
+            </div>
+          </div>
+
+          <!-- Verdict immediat sur les dates saisies -->
+          <div id="periode-verdict"></div>
+        </div>
+
+        <div class="card">
+          <div class="alert warn" id="alert-validation-requise" style="display:none">
+            <span>⏳</span>
+            <div class="alert-corps">
+              <strong>Vérification par le Bureau des Stages</strong>
+              <div class="alert-detail">Cette entreprise ou cette fonction n'est pas encore vérifiée dans notre référentiel. Votre demande sera examinée avant envoi, réponse sous 48h maximum. Vous serez notifié par email et sur la plateforme.</div>
+            </div>
+          </div>
+          <div style="margin-top:.25rem">
+            <button class="btn-send" id="btn-envoyer-demande" onclick="envoyerDemande()">📨 Envoyer la demande</button>
           </div>
           <div class="alert success" id="alert-demande">
-            ✅ Demande envoyée ! Votre lettre sera dans votre boîte mail dans moins de 5 minutes.
+            <span>✅</span>
+            <div class="alert-corps">Demande envoyée. Votre lettre sera dans votre boîte mail dans moins de 5 minutes.</div>
           </div>
+        </div>
         </div>
       </div>
 
@@ -526,46 +742,83 @@ body{min-height:100vh}
       </div>
 
       <!-- DOSSIER -->
+      <!-- ===================================================================
+           MON DOSSIER DE STAGE
+           ===================================================================
+           Trois etapes dans l'ordre. Chacune ne s'ouvre que lorsque la
+           precedente est faite, parce que c'est ainsi que le circuit reel
+           fonctionne : la convention signee par l'etudiant precede la
+           declaration du debut de stage.
+           =================================================================== -->
       <div class="page" id="page-dossier">
         <div class="page-header">
           <h2>Mon dossier de stage 📁</h2>
-          <p>Gérez l'ensemble de vos documents de stage</p>
+          <p id="dossier-sous-titre">Suivez les trois étapes dans l'ordre</p>
         </div>
-        <div class="card">
-          <div class="card-title">Début de stage — à déposer sous 2 semaines</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
-            <div>
-              <label class="form-label">Convention de stage (PDF signé)</label>
-              <div class="upload-zone" onclick="this.querySelector('input').click()">
-                <div class="upload-icon">📋</div>
-                <div class="upload-text">Glissez ou <span>choisissez</span> votre fichier</div>
-                <input type="file" style="display:none" accept=".pdf">
-              </div>
-            </div>
-            <div>
-              <label class="form-label">Lien de localisation de l'entreprise</label>
-              <input class="form-input" type="url" placeholder="https://maps.google.com/..." style="margin-top:0">
-              <p style="font-size:.75rem;color:var(--txt2);margin-top:.4rem">Google Maps, Waze, Apple Maps...</p>
+
+        <div id="dossier-bloque" style="display:none">
+          <div class="card">
+            <div class="bloc-vide">
+              <div class="bloc-vide-icone">⛔</div>
+              <h3>Aucun stage ouvert pour votre classe</h3>
+              <p>Le planning de votre classe n'est pas encore publié. Votre dossier s'activera dès que le Bureau des Stages aura fixé les dates.</p>
             </div>
           </div>
-          <button class="btn-send" style="padding:.7rem 1.5rem;font-size:.85rem">💾 Enregistrer le début de stage</button>
         </div>
+
+        <div id="dossier-contenu">
+
+        <!-- ===== RECAPITULATIF ===== -->
         <div class="card">
-          <div class="card-title">Fin de stage — à déposer sous 2 semaines après la fin</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-            <div>
-              <label class="form-label">Rapport de stage (PDF signé)</label>
-              <div class="upload-zone"><div class="upload-icon">📄</div><div class="upload-text">Déposer le rapport</div></div>
+          <div class="card-title">Votre stage en un coup d'œil</div>
+          <div class="recap" id="dossier-recap"></div>
+          <div id="dossier-alertes" style="margin-top:1rem"></div>
+        </div>
+
+        <!-- ===== ETAPE 1 : CONVENTION SIGNEE PAR L'ETUDIANT ===== -->
+        <div class="etape" id="etape-1">
+          <div class="etape-tete">
+            <div class="etape-num" id="etape-1-num">1</div>
+            <div class="etape-titre">
+              <h3>Déposer votre convention signée</h3>
+              <p>Signée par vous seul. C'est ce dépôt qui vous permet ensuite de déclarer le début de votre stage.</p>
             </div>
-            <div>
-              <label class="form-label">Fiche d'appréciation (PDF)</label>
-              <div class="upload-zone"><div class="upload-icon">📝</div><div class="upload-text">Déposer la fiche</div></div>
-            </div>
-            <div class="full" style="grid-column:1/-1">
-              <label class="form-label">Fiche d'auto-notation</label>
-              <div class="upload-zone"><div class="upload-icon">⭐</div><div class="upload-text">Déposer la fiche d'auto-notation</div></div>
-            </div>
+            <div class="etape-echeance" id="etape-1-echeance"></div>
           </div>
+          <div class="etape-corps" id="etape-1-corps"></div>
+        </div>
+
+        <!-- ===== ETAPE 2 : DEBUT DE STAGE ===== -->
+        <div class="etape" id="etape-2">
+          <div class="etape-tete">
+            <div class="etape-num" id="etape-2-num">2</div>
+            <div class="etape-titre">
+              <h3>Déclarer le début de votre stage</h3>
+              <p>Date de premier jour effectif et adresse exacte du lieu de stage.</p>
+            </div>
+            <div class="etape-echeance" id="etape-2-echeance"></div>
+          </div>
+          <div class="etape-corps" id="etape-2-corps"></div>
+        </div>
+
+        <!-- ===== ETAPE 3 : FIN DE STAGE ===== -->
+        <div class="etape" id="etape-3">
+          <div class="etape-tete">
+            <div class="etape-num" id="etape-3-num">3</div>
+            <div class="etape-titre">
+              <h3>Documents de fin de stage</h3>
+              <p id="etape-3-desc">À déposer dans la semaine qui suit la fin de votre stage.</p>
+            </div>
+            <div class="etape-echeance" id="etape-3-echeance"></div>
+          </div>
+          <div class="etape-corps" id="etape-3-corps"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Ce que vous n'avez pas à déposer</div>
+          <p class="aide sans-marge">La fiche d'appréciation est transmise directement par votre entreprise au Bureau des Stages, sous pli fermé. Elle ne passe pas par vous et vous n'en verrez pas le contenu.</p>
+        </div>
+
         </div>
       </div>
 
@@ -573,39 +826,12 @@ body{min-height:100vh}
       <div class="page" id="page-documents">
         <div class="page-header">
           <h2>Mes documents 📄</h2>
-          <p>Tous vos documents générés et archivés</p>
+          <p>Tous vos documents générés et déposés, dans l'ordre chronologique</p>
         </div>
         <div class="card">
-          <div class="card-title">Documents disponibles</div>
-          <div class="doc-list">
-            <div class="doc-item">
-              <div class="doc-icon">📩</div>
-              <div class="doc-info">
-                <div class="doc-name">Lettre de recommandation — TOTAL Cameroun</div>
-                <div class="doc-meta">Générée le 12 mars 2026 · Réf. ALS-2026-LIG3-00214</div>
-              </div>
-              <span class="badge complet">Valide</span>
-              <button class="btn-dl">⬇ Télécharger</button>
-            </div>
-            <div class="doc-item">
-              <div class="doc-icon">📋</div>
-              <div class="doc-info">
-                <div class="doc-name">Convention de stage signée</div>
-                <div class="doc-meta">Déposée le 18 mars 2026</div>
-              </div>
-              <span class="badge complet">Validé</span>
-              <button class="btn-dl">⬇ Télécharger</button>
-            </div>
-            <div class="doc-item">
-              <div class="doc-icon">📄</div>
-              <div class="doc-info">
-                <div class="doc-name">Rapport de stage</div>
-                <div class="doc-meta">À déposer avant le 2 juillet 2026</div>
-              </div>
-              <span class="badge attente">En attente</span>
-              <button class="btn-dl" style="opacity:.4;cursor:not-allowed">⬇ Télécharger</button>
-            </div>
-          </div>
+          <div class="card-title">Documents disponibles (<span id="archive-nb">0</span>)</div>
+          <div class="doc-list" id="archive-liste"></div>
+          <p class="aide">Les téléchargements passent par ALS et non par un lien public : chaque fichier est servi uniquement à son propriétaire, après vérification de son identité.</p>
         </div>
       </div>
 
@@ -639,7 +865,7 @@ body{min-height:100vh}
             </div>
             <div style="background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);padding:1rem">
               <div style="font-size:.75rem;color:var(--txt2);margin-bottom:.3rem">Année académique</div>
-              <div style="font-weight:500">2025 – 2026</div>
+              <div style="font-weight:500">2025-2026</div>
             </div>
           </div>
           <p style="font-size:.76rem;color:var(--txt3);margin-top:.9rem">Les informations académiques (faculté, classe, matricule) sont gérées par le Bureau des Stages et ne sont pas modifiables ici.</p>
@@ -698,6 +924,802 @@ function envoyerLienReinit(){
   document.getElementById('mdp-oublie-confirmation').style.display='block';
 }
 
+// ===== MODE CLAIR / SOMBRE =====
+// Pas de persistance : le mode choisi reste valable pour la session en
+// cours, revient au mode sombre par defaut (identite d'origine de
+// l'app etudiante) au rechargement.
+let currentTheme = 'dark';
+
+function toggleTheme(){
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  applyTheme();
+}
+
+function applyTheme(){
+  const html = document.documentElement;
+  const btn = document.getElementById('theme-toggle-btn');
+  if(currentTheme === 'light'){
+    html.setAttribute('data-theme', 'light');
+    btn.textContent = '🌙';
+    btn.title = 'Mode sombre';
+  }else{
+    html.removeAttribute('data-theme');
+    btn.textContent = '☀️';
+    btn.title = 'Mode clair';
+  }
+}
+
+
+// ==========================================================================
+// PLANNING RESOLU, PERIODE IMPOSEE ET DOSSIER DE STAGE
+// ==========================================================================
+// La periode d'un etudiant n'est jamais un choix libre : elle vient de la
+// regle de son niveau ou de l'exception de sa classe. Cette maquette
+// reproduit la resolution du serveur pour montrer le resultat a l'ecran.
+
+// Cinq profils de demonstration, choisis a la connexion. Ils couvrent les
+// cas qui changent l'affichage : stage normal, impregnation sans rapport,
+// classe sans planning, classe sans modele de lettre, et retardataire
+// bascule en rattrapage.
+const PROFILS = {
+  LIG3: {
+    nom:"Sylvie EMANE", initiales:"SE", identifiant:"LIG3-2025-0001",
+    classe:"LIG3", classe_nom:"Licence 3 Informatique de Gestion",
+    niveau:"L3", faculte:"FSSG",
+    planning:{
+      libelle:"Licence 3 (BME 3, LEG 3, LGRH 3, LIG 3)",
+      origine:"Règle du niveau Licence 3, toutes facultés",
+      type:"STAGE", duree:"9 semaines", duree_semaines:9,
+      debut:"2026-05-04", fin:"2026-07-03",
+      depot_rapport:"2026-07-10",
+      rattrapage:true, depot_rattrapage:"2026-09-15",
+      attendus:{convention:true, rapport:true, autonotation:true}
+    },
+    depart:null
+  },
+  LIG2: {
+    nom:"Marc ONANA", initiales:"MO", identifiant:"LIG2-2025-0014",
+    classe:"LIG2", classe_nom:"Licence 2 Informatique de Gestion",
+    niveau:"L2", faculte:"FSSG",
+    planning:{
+      libelle:"LIG 1 et LIG 2 (imprégnation)",
+      origine:"Exception propre à votre classe",
+      type:"IMPREGNATION", duree:"3 semaines", duree_semaines:3,
+      debut:"2026-06-08", fin:"2026-06-28",
+      depot_rapport:null,
+      rattrapage:false, depot_rattrapage:null,
+      attendus:{convention:false, rapport:false, autonotation:false}
+    },
+    depart:null
+  },
+  MDA1: {
+    nom:"Aïcha BELLO", initiales:"AB", identifiant:"MDA1-2025-0007",
+    classe:"MDA1", classe_nom:"Master 1 Droit des Affaires",
+    niveau:"M1", faculte:"FSJP",
+    planning:null,
+    depart:null
+  },
+  LQSSE2: {
+    nom:"Nadine FOTSO", initiales:"NF", identifiant:"LQSSE2-2025-0023",
+    classe:"LQSSE2", classe_nom:"Licence 2 Qualit\u00e9, Sant\u00e9, S\u00e9curit\u00e9 et Environnement",
+    niveau:"L2", faculte:"FSSG",
+    // Les dates existent, le modele de lettre non : le blocage vient
+    // d'ailleurs, et le message doit le dire.
+    modele:false,
+    planning:{
+      libelle:"Licence 2 (toutes fili\u00e8res)",
+      origine:"R\u00e8gle du niveau Licence 2, toutes facult\u00e9s",
+      type:"STAGE", duree:"6 semaines", duree_semaines:6,
+      debut:"2026-06-01", fin:"2026-07-12",
+      depot_rapport:"2026-07-20",
+      rattrapage:false, depot_rattrapage:null,
+      attendus:{convention:true, rapport:true, autonotation:true}
+    },
+    depart:null
+  },
+  LIG3R: {
+    nom:"Paul MBALLA", initiales:"PM", identifiant:"LIG3-2025-0042",
+    classe:"LIG3", classe_nom:"Licence 3 Informatique de Gestion",
+    niveau:"L3", faculte:"FSSG",
+    planning:{
+      libelle:"Licence 3 (BME 3, LEG 3, LGRH 3, LIG 3)",
+      origine:"Règle du niveau Licence 3, toutes facultés",
+      type:"STAGE", duree:"9 semaines", duree_semaines:9,
+      debut:"2026-05-04", fin:"2026-07-03",
+      depot_rapport:"2026-07-10",
+      rattrapage:true, depot_rattrapage:"2026-09-15",
+      attendus:{convention:true, rapport:true, autonotation:true}
+    },
+    depart:"2026-06-15"
+  }
+};
+
+// Deux raisons peuvent empecher une demande, et l'etudiant doit savoir
+// laquelle : dans un cas le Bureau des Stages doit publier des dates, dans
+// l'autre remplir le modele de lettre. Dans les deux cas l'etudiant n'a
+// rien a faire, mais il ne doit pas croire que le systeme est en panne.
+// Le nom de la classe vient de la base, donc de la saisie d'un agent. Il
+// est insere dans du HTML : il doit etre echappe, ici comme partout.
+function echapper(t){
+  return String(t===null||t===undefined?'':t).replace(/[&<>"']/g,
+    c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+const MOTIFS_BLOCAGE = {
+  PLANNING: {
+    titre:"Les dates de stage de votre classe ne sont pas encore fix\u00e9es",
+    texte:"Le Bureau des Stages n'a pas encore publi\u00e9 le planning de <strong>{classe}</strong> " +
+          "pour l'ann\u00e9e en cours. Tant que ces dates ne sont pas arr\u00eat\u00e9es, aucune lettre " +
+          "ne peut \u00eatre g\u00e9n\u00e9r\u00e9e : elle partirait chez une entreprise sans p\u00e9riode de stage."
+  },
+  MODELE: {
+    titre:"Le mod\u00e8le de lettre de votre classe n'est pas encore rempli",
+    texte:"Les dates de stage de <strong>{classe}</strong> sont publi\u00e9es, mais le Bureau des Stages " +
+          "n'a pas encore saisi les objectifs et les missions qui figurent sur la lettre. " +
+          "Une lettre sans ces \u00e9l\u00e9ments ne serait pas recevable par une entreprise."
+  }
+};
+const SUITE_BLOCAGE = "<br><br>Vous serez notifi\u00e9 par email d\u00e8s que ce sera fait. " +
+                      "Aucune d\u00e9marche de votre part n'est n\u00e9cessaire d'ici l\u00e0.";
+
+const NB_LETTRES = 1;   // une seule lettre d'exemple, comme dans l'archive
+let ETU = null;   // profil courant
+let PLAN_ETU = null;  // sa ligne de planning resolue, ou null si bloque
+
+// Etat du dossier, reconstruit a chaque connexion
+let DOSSIER = {
+  conv_debut:null, conv_complete:null, rapport:null, fiche:null,
+  date_debut:"", localisation:""
+};
+
+// ----- Outils de dates -----
+// Une semaine vaut sept jours calendaires, samedi et dimanche compris.
+// Le decompte est glissant a partir de la date de depart, sans alignement
+// sur les semaines civiles : une classe qui demarre un mercredi ne doit pas
+// perdre deux jours.
+// Tout le calcul se fait en temps universel. Melanger une lecture a minuit
+// local et une ecriture en temps universel decale chaque date d'un jour des
+// que le poste n'est pas sur Greenwich, ce qui est le cas a Yaounde.
+const JOUR = 86400000;
+function d(s){
+  if(!s) return null;
+  const [a,m,j] = s.split('-').map(Number);
+  return new Date(Date.UTC(a, m-1, j));
+}
+function iso(dt){ return dt.toISOString().slice(0,10); }
+function plusSemaines(s, n){ const x=d(s); x.setTime(x.getTime()+(n*7-1)*JOUR); return iso(x); }
+function plusJours(s, n){ const x=d(s); x.setTime(x.getTime()+n*JOUR); return iso(x); }
+function ecartJours(a, b){ return Math.round((d(b)-d(a))/JOUR); }
+function frDate(s){
+  if(!s) return "-";
+  return d(s).toLocaleDateString('fr-FR',
+    {day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
+}
+function frCourt(s){
+  if(!s) return "-";
+  return d(s).toLocaleDateString('fr-FR',
+    {day:'2-digit',month:'2-digit',year:'numeric',timeZone:'UTC'});
+}
+
+// Date du jour figee pour la maquette, sinon les captures changent chaque
+// jour et les etats deviennent impossibles a montrer.
+const AUJOURDHUI = "2026-06-22";
+
+// Une duree affichee doit toujours decouler des dates montrees juste a cote.
+// La duree en semaines de la ligne de planning ne sert qu'au recalcul d'un
+// demarrage decale : l'afficher telle quelle a cote de dates qui disent
+// autre chose met une contradiction sous les yeux de l'etudiant.
+function dureeEntre(a, b){
+  if(!a || !b) return "-";
+  const j = ecartJours(a, b) + 1;
+  const sem = Math.floor(j/7), reste = j%7;
+  if(sem === 0) return j + " jour" + (j>1?"s":"");
+  if(reste === 0) return sem + " semaine" + (sem>1?"s":"");
+  return sem + " semaine" + (sem>1?"s":"") + " et " + reste + " jour" + (reste>1?"s":"");
+}
+
+// ==========================================================================
+// PERIODE SUR LA DEMANDE DE LETTRE
+// ==========================================================================
+function remplirPeriodes(){
+  const sel = document.getElementById('f-periode');
+  if(!PLAN_ETU){ sel.innerHTML=''; return; }
+  sel.innerHTML =
+    `<option value="IMPOSEE">Session normale : du ${frDate(PLAN_ETU.debut)} au ${frDate(PLAN_ETU.fin)}</option>
+     <option value="AUTRE">Autre période</option>`;
+  const dl = document.getElementById('f-debut');
+  const fi = document.getElementById('f-fin');
+  // Bornes : l'etudiant ne peut pas declarer un debut hors de la periode de
+  // sa classe, sinon il repousserait lui-meme toutes ses echeances.
+  dl.min = PLAN_ETU.debut; dl.max = PLAN_ETU.fin;
+  fi.min = PLAN_ETU.debut;
+  fi.max = PLAN_ETU.depot_rapport || PLAN_ETU.fin;
+  onPeriodeChange();
+}
+
+function onPeriodeChange(){
+  const libre = document.getElementById('f-periode').value === 'AUTRE';
+  document.getElementById('dates-libres').classList.toggle('ouvert', libre);
+  document.getElementById('periode-encart').style.display = libre ? 'none' : '';
+  if(libre) onDatesLibres(); else { rendrePeriodeImposee(); videVerdict(); }
+}
+
+function rendrePeriodeImposee(){
+  if(!PLAN_ETU) return;
+  const p = PLAN_ETU;
+  let h = `<div class="periode-ligne"><dt>Du</dt><dd>${frDate(p.debut)}</dd></div>
+           <div class="periode-ligne"><dt>Au</dt><dd>${frDate(p.fin)}</dd></div>
+           <div class="periode-ligne"><dt>Durée</dt><dd>${dureeEntre(p.debut, p.fin)}</dd></div>
+           <div class="periode-ligne"><dt>Nature</dt><dd>${p.type==='STAGE'?'Stage académique':"Activité d'imprégnation"}</dd></div>`;
+  if(p.depot_rapport)
+    h += `<div class="periode-ligne"><dt>Dépôt du rapport au plus tard</dt><dd>${frDate(p.depot_rapport)}</dd></div>`;
+  else
+    h += `<div class="periode-ligne"><dt>Rapport de stage</dt><dd>Non demandé pour votre classe</dd></div>`;
+  document.getElementById('periode-details').innerHTML = h;
+  document.getElementById('periode-source').textContent =
+    `Ces dates sont fixées par le Bureau des Stages. Origine : ${p.origine}. Elles ne sont pas modifiables.`;
+}
+
+function videVerdict(){ document.getElementById('periode-verdict').innerHTML=''; }
+
+// Verdict immediat sur des dates libres. L'etudiant doit savoir le premier
+// jour, pas le dernier, qu'il bascule en rattrapage.
+function onDatesLibres(){
+  const deb = document.getElementById('f-debut').value;
+  const fin = document.getElementById('f-fin').value;
+  const cible = document.getElementById('periode-verdict');
+  const btn = document.getElementById('btn-envoyer-demande');
+  btn.disabled = false;
+
+  if(!deb && !fin){ cible.innerHTML=''; return; }
+  if(!deb || !fin){
+    cible.innerHTML = boite('info','Dates incomplètes','Renseignez les deux dates pour connaître les conséquences sur vos échéances.');
+    return;
+  }
+  if(d(fin) < d(deb)){
+    cible.innerHTML = boite('stop','Dates incohérentes','La date de fin précède la date de début.');
+    btn.disabled = true; return;
+  }
+  if(d(deb) < d(PLAN_ETU.debut) || d(deb) > d(PLAN_ETU.fin)){
+    cible.innerHTML = boite('stop','Date de début hors période',
+      `Votre classe est en stage entre le ${frDate(PLAN_ETU.debut)} et le ${frDate(PLAN_ETU.fin)}. Une date en dehors de cet intervalle ne peut pas être acceptée.`);
+    btn.disabled = true; return;
+  }
+
+  const lim = PLAN_ETU.depot_rapport;
+  if(!lim){
+    cible.innerHTML = boite('info','Aucun rapport attendu',
+      `Votre classe ne dépose pas de rapport de stage. Votre période court du ${frDate(deb)} au ${frDate(fin)}.`);
+    return;
+  }
+
+  const depot = plusJours(fin, 7);
+  if(d(depot) > d(lim)){
+    const retard = ecartJours(lim, depot);
+    cible.innerHTML = boite('warn','Vous relèverez de la session de rattrapage',
+      `Avec ces dates, votre stage se termine le ${frDate(fin)}. Vous auriez jusqu'au ${frDate(depot)} pour déposer votre rapport, soit ${retard} jour(s) après la date limite du ${frDate(lim)}.` +
+      (PLAN_ETU.depot_rattrapage
+        ? ` Votre dépôt sera donc examiné en session de rattrapage, dont la date limite est le ${frDate(PLAN_ETU.depot_rattrapage)}.`
+        : ` Aucune session de rattrapage n'est ouverte pour votre classe : rapprochez-vous du Bureau des Stages avant de valider.`));
+    return;
+  }
+  const marge = ecartJours(depot, lim);
+  cible.innerHTML = boite('info','Dates compatibles avec la session normale',
+    `Votre stage se termine le ${frDate(fin)}. Vous aurez jusqu'au ${frDate(depot)} pour déposer votre rapport, soit ${marge} jour(s) avant la date limite du ${frDate(lim)}.`);
+}
+
+function boite(type, titre, detail){
+  const ic = {stop:'⛔', warn:'⚠️', info:'ℹ️', success:'✅'}[type] || 'ℹ️';
+  return `<div class="alert ${type}" style="margin-top:1rem">
+      <span>${ic}</span>
+      <div class="alert-corps"><strong>${titre}</strong><div class="alert-detail">${detail}</div></div>
+    </div>`;
+}
+
+// ==========================================================================
+// DOSSIER DE STAGE
+// ==========================================================================
+function calculerEcheances(){
+  const e = {debut:DOSSIER.date_debut, fin:null, depot_fin:null, limite_debut:null};
+  if(!e.debut || !PLAN_ETU) return e;
+  // La fin retenue est celle du planning tant que l'etudiant demarre a
+  // l'heure. La duree en semaines ne sert qu'a recalculer un demarrage
+  // decale : deux sources de verite ne doivent pas diverger en silence.
+  const finCalculee = plusSemaines(e.debut, PLAN_ETU.duree_semaines);
+  e.fin = d(e.debut) > d(PLAN_ETU.debut) ? finCalculee : PLAN_ETU.fin;
+  e.depot_fin = plusJours(e.fin, 7);
+  e.limite_debut = plusSemaines(e.debut, 2);
+  return e;
+}
+
+function renderDossier(){
+  const bloque = !PLAN_ETU;
+  document.getElementById('dossier-bloque').style.display = bloque ? '' : 'none';
+  document.getElementById('dossier-contenu').style.display = bloque ? 'none' : '';
+  if(bloque) return;
+
+  const e = calculerEcheances();
+
+  // ----- Recapitulatif -----
+  const enRattrapage = e.depot_fin && PLAN_ETU.depot_rapport && d(e.depot_fin) > d(PLAN_ETU.depot_rapport);
+  let recap = `
+    <div class="recap-case"><div class="recap-lbl">Classe</div><div class="recap-val">${ETU.classe_nom}</div></div>
+    <div class="recap-case"><div class="recap-lbl">Nature</div><div class="recap-val">${PLAN_ETU.type==='STAGE'?'Stage académique':"Activité d'imprégnation"}</div></div>
+    <div class="recap-case"><div class="recap-lbl">Durée</div><div class="recap-val">${dureeEntre(DOSSIER.date_debut||PLAN_ETU.debut, e.fin||PLAN_ETU.fin)}</div></div>
+    <div class="recap-case"><div class="recap-lbl">Début déclaré</div><div class="recap-val${DOSSIER.date_debut?'':' or'}">${DOSSIER.date_debut?frCourt(DOSSIER.date_debut):'à déclarer'}</div></div>
+    <div class="recap-case"><div class="recap-lbl">Fin ${DOSSIER.date_debut?'calculée':'prévue'}</div><div class="recap-val">${frCourt(e.fin||PLAN_ETU.fin)}</div></div>`;
+  if(PLAN_ETU.depot_rapport)
+    recap += `<div class="recap-case"><div class="recap-lbl">Dépôt du rapport</div><div class="recap-val${enRattrapage?' rouge':''}">${frCourt(e.depot_fin||PLAN_ETU.depot_rapport)}</div></div>`;
+  document.getElementById('dossier-recap').innerHTML = recap;
+
+  // ----- Alertes du haut -----
+  let al = '';
+  if(enRattrapage){
+    al += boite('warn','Vous relevez de la session de rattrapage',
+      `Votre stage se termine le ${frDate(e.fin)} et votre dépôt est attendu au plus tard le ${frDate(e.depot_fin)}, après la date limite de la session normale du ${frDate(PLAN_ETU.depot_rapport)}.` +
+      (PLAN_ETU.depot_rattrapage ? ` La date limite de rattrapage est le ${frDate(PLAN_ETU.depot_rattrapage)}.` : ''));
+  }
+  if(DOSSIER.date_debut && !DOSSIER.localisation && d(AUJOURDHUI) > d(e.limite_debut)){
+    al += boite('stop','Étape de début incomplète',
+      `Vous deviez renseigner le lieu de votre stage avant le ${frDate(e.limite_debut)}. Faites-le sans tarder : le Bureau des Stages a été notifié.`);
+  }
+  document.getElementById('dossier-alertes').innerHTML = al;
+
+  renderEtape1(e);
+  renderEtape2(e);
+  renderEtape3(e);
+}
+
+// ----- Etape 1 : convention signee par l'etudiant -----
+function renderEtape1(e){
+  const bloc = document.getElementById('etape-1');
+  const fait = !!DOSSIER.conv_debut;
+  classeEtape(bloc, fait ? 'faite' : 'active');
+  document.getElementById('etape-1-num').textContent = fait ? '✓' : '1';
+  document.getElementById('etape-1-echeance').innerHTML = '';
+
+  document.getElementById('etape-1-corps').innerHTML =
+    ligneDepot({
+      cle:'conv_debut', icone:'📋', nom:'Convention signée par vous',
+      doc:DOSSIER.conv_debut,
+      aide:"Un seul fichier PDF. Le Bureau des Stages la signera ensuite, puis l'entreprise."
+    }) +
+    (fait ? '' : `<p class="aide sans-marge">Tant que ce dépôt n'est pas fait, l'étape 2 reste fermée : ALS ne peut pas enregistrer un début de stage sans convention.</p>`);
+}
+
+// ----- Etape 2 : declaration du debut -----
+function renderEtape2(e){
+  const bloc = document.getElementById('etape-2');
+  const ouverte = !!DOSSIER.conv_debut;
+  const fait = ouverte && DOSSIER.date_debut && DOSSIER.localisation;
+  classeEtape(bloc, !ouverte ? 'verrouillee' : (fait ? 'faite' : 'active'));
+  document.getElementById('etape-2-num').textContent = fait ? '✓' : (ouverte ? '2' : '🔒');
+
+  const ech = document.getElementById('etape-2-echeance');
+  if(ouverte && DOSSIER.date_debut && !fait){
+    const reste = ecartJours(AUJOURDHUI, e.limite_debut);
+    ech.className = 'etape-echeance ' + (reste<0?'depassee':(reste<=3?'proche':'ok'));
+    ech.textContent = reste<0 ? `en retard de ${-reste} j` : `${reste} j restants`;
+    if(reste<0) bloc.classList.add('en-retard');
+  } else { ech.className='etape-echeance ok'; ech.textContent=''; }
+
+  if(!ouverte){
+    document.getElementById('etape-2-corps').innerHTML =
+      `<p class="aide sans-marge">Déposez d'abord votre convention signée à l'étape 1.</p>`;
+    return;
+  }
+
+  document.getElementById('etape-2-corps').innerHTML = `
+    <div class="form-grid">
+      <div>
+        <label class="form-label">Premier jour effectif de stage</label>
+        <input class="form-input" type="date" id="f-debut-effectif"
+               min="${PLAN_ETU.debut}" max="${PLAN_ETU.fin}"
+               value="${DOSSIER.date_debut}" onchange="majDebutEffectif()">
+        <p class="aide">Entre le ${frCourt(PLAN_ETU.debut)} et le ${frCourt(PLAN_ETU.fin)}, bornes du planning de votre classe.</p>
+      </div>
+      <div>
+        <label class="form-label">Adresse exacte du lieu de stage</label>
+        <input class="form-input" type="url" id="f-localisation"
+               placeholder="https://maps.google.com/..." value="${DOSSIER.localisation}"
+               onchange="majLocalisation()">
+        <p class="aide">Lien Google Maps, Waze ou Apple Maps du bâtiment où vous vous rendez.</p>
+      </div>
+    </div>
+    <div id="etape-2-verdict"></div>
+    <div style="margin-top:1rem">
+      <button class="btn-send" style="padding:.7rem 1.5rem;font-size:.85rem" onclick="enregistrerDebut()">💾 Enregistrer le début de stage</button>
+    </div>`;
+  majVerdictDebut();
+}
+
+function majDebutEffectif(){
+  DOSSIER.date_debut = document.getElementById('f-debut-effectif').value;
+  majVerdictDebut();
+}
+function majLocalisation(){
+  DOSSIER.localisation = document.getElementById('f-localisation').value.trim();
+}
+function majVerdictDebut(){
+  const cible = document.getElementById('etape-2-verdict');
+  if(!cible) return;
+  if(!DOSSIER.date_debut){ cible.innerHTML=''; return; }
+  const e = calculerEcheances();
+  let txt = `Votre stage se termine le ${frDate(e.fin)}. Vous avez jusqu'au ${frDate(e.limite_debut)} pour compléter cette étape.`;
+  if(PLAN_ETU.depot_rapport && d(e.depot_fin) > d(PLAN_ETU.depot_rapport)){
+    cible.innerHTML = boite('warn','Cette date vous place en session de rattrapage',
+      txt + ` Votre rapport serait attendu le ${frDate(e.depot_fin)}, après la date limite du ${frDate(PLAN_ETU.depot_rapport)}.`);
+  } else {
+    cible.innerHTML = boite('info','Échéances calculées', txt +
+      (PLAN_ETU.depot_rapport ? ` Dépôt du rapport au plus tard le ${frDate(e.depot_fin)}.` : ''));
+  }
+}
+function enregistrerDebut(){
+  if(!DOSSIER.date_debut){ toast("⚠️ Renseignez d'abord le premier jour de stage."); return; }
+  if(!DOSSIER.localisation){ toast("⚠️ Renseignez l'adresse exacte du lieu de stage."); return; }
+  toast('✅ Début de stage enregistré. Le Bureau des Stages doit maintenant le confirmer.');
+  renderDossier();
+}
+
+// ----- Etape 3 : fin de stage -----
+function renderEtape3(e){
+  const bloc = document.getElementById('etape-3');
+  const a = PLAN_ETU.attendus;
+  const rienAttendu = !a.rapport && !a.autonotation && !a.convention;
+  const ouverte = !!DOSSIER.date_debut;
+
+  document.getElementById('etape-3-desc').textContent = rienAttendu
+    ? "Votre classe ne dépose aucun document de fin. Cette étape est sans objet."
+    : "À déposer dans la semaine qui suit la fin de votre stage.";
+
+  const fait = ouverte && (!a.rapport || DOSSIER.rapport) && (!a.autonotation || DOSSIER.fiche);
+  classeEtape(bloc, rienAttendu ? 'faite' : (!ouverte ? 'verrouillee' : (fait ? 'faite' : 'active')));
+  document.getElementById('etape-3-num').textContent = rienAttendu||fait ? '✓' : (ouverte ? '3' : '🔒');
+
+  const ech = document.getElementById('etape-3-echeance');
+  if(ouverte && !rienAttendu && !fait){
+    const reste = ecartJours(AUJOURDHUI, e.depot_fin);
+    ech.className = 'etape-echeance ' + (reste<0?'depassee':(reste<=7?'proche':'ok'));
+    ech.textContent = reste<0 ? `en retard de ${-reste} j` : `${reste} j restants`;
+    if(reste<0) bloc.classList.add('en-retard');
+  } else { ech.className='etape-echeance ok'; ech.textContent=''; }
+
+  if(rienAttendu){
+    document.getElementById('etape-3-corps').innerHTML =
+      `<p class="aide sans-marge">Votre classe effectue une activité d'imprégnation. Ni rapport, ni fiche d'auto-notation, ni convention entièrement signée ne vous sont réclamés.</p>`;
+    return;
+  }
+  if(!ouverte){
+    document.getElementById('etape-3-corps').innerHTML =
+      `<p class="aide sans-marge">Cette étape s'ouvrira dès que vous aurez déclaré le début de votre stage.</p>`;
+    return;
+  }
+
+  let h = '';
+  if(a.convention){
+    h += ligneDepot({
+      cle:'conv_complete', icone:'📋', nom:'Convention signée des trois parties',
+      doc:DOSSIER.conv_complete,
+      aide:"Vous, l'université, puis l'entreprise. Sans elle, votre rapport sera refusé.",
+      facultatif:!a.rapport
+    });
+  }
+  if(a.rapport){
+    const verrou = a.convention && !DOSSIER.conv_complete;
+    h += ligneDepot({
+      cle:'rapport', icone:'📄', nom:'Rapport de stage',
+      doc:DOSSIER.rapport, verrou,
+      aide: verrou
+        ? "Déposez d'abord la convention signée des trois parties : sans elle, le rapport est refusé."
+        : `À déposer au plus tard le ${frDate(e.depot_fin)}.`
+    });
+  }
+  if(a.autonotation){
+    h += ligneDepot({
+      cle:'fiche', icone:'⭐', nom:"Fiche d'auto-notation",
+      doc:DOSSIER.fiche,
+      aide:`À déposer au plus tard le ${frDate(e.depot_fin)}.`
+    });
+  }
+  document.getElementById('etape-3-corps').innerHTML = h;
+}
+
+// ----- Une ligne de depot -----
+// Le compteur affiche deux tentatives. Le systeme en autorise trois : la
+// troisieme est une marge invisible, jamais annoncee a l'etudiant.
+function ligneDepot(o){
+  const doc = o.doc;
+  const restantes = doc ? Math.max(0, 2 - doc.tentative) : 2;
+  const epuise = doc && restantes === 0;
+  let etat = '';
+  if(doc){
+    const badge = {NON_VERIFIE:'<span class="badge attente">en attente de vérification</span>',
+                   CONFORME:'<span class="badge complet">conforme</span>',
+                   NON_CONFORME:'<span class="badge retard">non conforme</span>'}[doc.statut];
+    etat = `${badge} · déposé le ${frCourt(doc.date)}`;
+    if(doc.statut==='NON_CONFORME' && doc.motif) etat += `<br>Motif : ${doc.motif}`;
+  } else {
+    etat = o.facultatif ? '<span class="depot-facultatif">facultatif pour votre classe</span>' : 'aucun fichier déposé';
+  }
+
+  const btn = o.verrou
+    ? `<button class="btn-depot" disabled>Déposer</button>`
+    : (doc
+        ? (epuise
+            ? `<button class="btn-depot" disabled>Tentatives épuisées</button>`
+            : `<button class="btn-depot refaire" onclick="deposer('${o.cle}')">Remplacer</button>`)
+        : `<button class="btn-depot" onclick="deposer('${o.cle}')">⬆ Déposer</button>`);
+
+  return `<div class="depot">
+      <div class="depot-icone">${o.icone}</div>
+      <div class="depot-corps">
+        <div class="depot-nom">${o.nom}</div>
+        <div class="depot-meta">${etat}<br>${o.aide||''}</div>
+      </div>
+      <div class="depot-actions">
+        ${doc && !epuise ? `<span class="depot-tentatives">${restantes} tentative(s)</span>` : ''}
+        ${btn}
+      </div>
+    </div>`;
+}
+
+// Simulation du depot pour la maquette.
+function deposer(cle){
+  const actuel = DOSSIER[cle];
+  DOSSIER[cle] = {
+    date: AUJOURDHUI,
+    statut: 'NON_VERIFIE',
+    tentative: actuel ? actuel.tentative + 1 : 1,
+    motif: ''
+  };
+  toast('✅ Fichier déposé. Le Bureau des Stages doit le vérifier.');
+  renderDossier();
+  renderArchive();
+}
+
+function classeEtape(el, etat){
+  el.className = 'etape' + (etat ? ' '+etat : '');
+}
+
+// ==========================================================================
+// ARCHIVE DES DOCUMENTS
+// ==========================================================================
+function renderArchive(){
+  const cible = document.getElementById('archive-liste');
+  if(!cible) return;
+  const lignes = [];
+  lignes.push({icone:'📩', nom:'Lettre de recommandation, TOTAL Cameroun',
+    meta:`Générée le ${frCourt('2026-03-12')} · Réf. ALS-2026-${ETU.classe}-00214`,
+    badge:'<span class="badge complet">valide</span>', dispo:true});
+  const libelles = {
+    conv_debut:"Convention signée par vous",
+    conv_complete:"Convention signée des trois parties",
+    rapport:"Rapport de stage",
+    fiche:"Fiche d'auto-notation"
+  };
+  Object.keys(libelles).forEach(k=>{
+    const doc = DOSSIER[k];
+    if(!doc) return;
+    const badge = {NON_VERIFIE:'<span class="badge attente">en attente</span>',
+                   CONFORME:'<span class="badge complet">conforme</span>',
+                   NON_CONFORME:'<span class="badge retard">non conforme</span>'}[doc.statut];
+    lignes.push({icone:k==='rapport'?'📄':(k==='fiche'?'⭐':'📋'), nom:libelles[k],
+      meta:`Déposé le ${frCourt(doc.date)} · tentative ${doc.tentative}`, badge, dispo:true});
+  });
+
+  document.getElementById('archive-nb').textContent = lignes.length;
+  cible.innerHTML = lignes.map(l=>`
+    <div class="doc-item">
+      <div class="doc-icon">${l.icone}</div>
+      <div class="doc-info"><div class="doc-name">${l.nom}</div><div class="doc-meta">${l.meta}</div></div>
+      ${l.badge}
+      <button class="btn-dl">⬇ Télécharger</button>
+    </div>`).join('') ||
+    `<p class="aide sans-marge">Aucun document pour l'instant. Ils apparaîtront ici au fur et à mesure de vos dépôts.</p>`;
+}
+
+// ==========================================================================
+// DEMARRAGE
+// ==========================================================================
+function chargerProfil(cle){
+  ETU = PROFILS[cle] || PROFILS.LIG3;
+  PROFIL_COURANT = PROFILS[cle] ? cle : 'LIG3';
+  PLAN_ETU = ETU.planning;
+  DOSSIER = {conv_debut:null, conv_complete:null, rapport:null, fiche:null,
+             date_debut:"", localisation:""};
+
+  // Le retardataire arrive avec sa convention deja deposee et un debut
+  // tardif : c'est le seul moyen de montrer l'ecran de rattrapage.
+  if(ETU.depart){
+    DOSSIER.conv_debut = {date:"2026-06-16", statut:'CONFORME', tentative:1, motif:''};
+    DOSSIER.date_debut = ETU.depart;
+    DOSSIER.localisation = "https://maps.google.com/?q=Bastos+Yaounde";
+  }
+
+  const av = document.getElementById('tb-avatar');
+  if(av){ av.textContent = ETU.initiales; av.title = ETU.nom; }
+  const bonjour = document.getElementById('tb-bonjour');
+  if(bonjour) bonjour.innerHTML = 'Bonjour, ' + ETU.nom.split(' ')[0] + ' \ud83d\udc4b';
+  const sous = document.getElementById('tb-sous-titre');
+  if(sous) sous.textContent = ETU.classe_nom + ', 2025-2026 \u00b7 ' + ETU.identifiant;
+  document.querySelectorAll('.js-classe').forEach(e=>e.textContent = ETU.classe_nom);
+  document.querySelectorAll('.js-identifiant').forEach(e=>e.textContent = ETU.identifiant);
+  // Le planning d'abord : sans dates, la question du modele ne se pose pas.
+  const motif = !PLAN_ETU ? 'PLANNING' : (ETU.modele === false ? 'MODELE' : null);
+  document.getElementById('demande-bloquee').style.display = motif ? '' : 'none';
+  document.getElementById('demande-formulaire').style.display = motif ? 'none' : '';
+  if(motif){
+    const m = MOTIFS_BLOCAGE[motif];
+    document.getElementById('bloc-titre').textContent = m.titre;
+    document.getElementById('bloc-texte').innerHTML =
+      m.texte.replace('{classe}', echapper(ETU.classe_nom)) + SUITE_BLOCAGE;
+  } else {
+    remplirPeriodes();
+  }
+
+  renderDossier();
+  renderArchive();
+  renderTableauDeBord();
+}
+
+function renderTableauDeBord(){
+  const cible = document.getElementById('tb-etat');
+  const tl = document.getElementById('tb-timeline');
+  if(!PLAN_ETU){
+    if(cible) cible.innerHTML = boite('stop',"Votre classe n'a pas encore de planning",
+      "Aucune demande de lettre n'est possible tant que le Bureau des Stages n'a pas fixé les dates de stage de votre classe.");
+    if(tl) tl.innerHTML = '';
+    document.getElementById('tb-docs').textContent = '-';
+    document.getElementById('tb-jours').textContent = '-';
+    const l0 = document.getElementById('tb-lettres'); if(l0) l0.textContent = '0';
+    const s0 = document.getElementById('tb-statut');
+    if(s0) s0.innerHTML = '<span class="badge attente">● En attente du planning</span>';
+    return;
+  }
+  if(cible) cible.innerHTML = '';
+
+  const e = calculerEcheances();
+  const a = PLAN_ETU.attendus;
+  const total = (a.convention?2:0) + (a.rapport?1:0) + (a.autonotation?1:0);
+  const faits = (a.convention ? (DOSSIER.conv_debut?1:0)+(DOSSIER.conv_complete?1:0) : 0)
+              + (a.rapport && DOSSIER.rapport ?1:0)
+              + (a.autonotation && DOSSIER.fiche ?1:0);
+  document.getElementById('tb-docs').textContent = total ? `${faits} / ${total}` : 'aucun';
+  const restants = DOSSIER.date_debut && e.depot_fin ? ecartJours(AUJOURDHUI, e.depot_fin) : null;
+  document.getElementById('tb-jours').textContent =
+    (restants===null || !total) ? '-' : (restants<0 ? `${-restants} j de retard` : restants);
+
+  // Les deux dernieres vignettes decoulent de la meme source que le reste :
+  // une valeur figee ici contredirait la situation affichee juste en dessous.
+  const lettres = document.getElementById('tb-lettres');
+  if(lettres) lettres.textContent = NB_LETTRES;
+  const statut = document.getElementById('tb-statut');
+  if(statut){
+    let cl='normal', txt='Normal';
+    if(!DOSSIER.conv_debut){ cl='attente'; txt='À démarrer'; }
+    else if(restants!==null && restants<0){ cl='retard'; txt='En retard'; }
+    else if(total && faits===total){ cl='complet'; txt='Complet'; }
+    else if(PLAN_ETU.depot_rapport && e.depot_fin && d(e.depot_fin) > d(PLAN_ETU.depot_rapport)){
+      cl='retard'; txt='Rattrapage';
+    }
+    statut.innerHTML = `<span class="badge ${cl}">● ${txt}</span>`;
+  }
+
+  // La chronologie se construit a partir de la situation reelle de
+  // l'etudiant. Elle affichait auparavant une echeance de rapport meme aux
+  // classes qui n'en deposent pas : precisement ce que le planning doit
+  // empecher.
+  if(!tl) return;
+  const etapes = [];
+  etapes.push({
+    etat: DOSSIER.conv_debut ? 'done' : 'active',
+    titre: 'Convention signée par vous',
+    desc: DOSSIER.conv_debut ? 'Déposée, en attente de la signature de l\'université'
+                             : 'À déposer pour pouvoir déclarer votre début de stage',
+    date: DOSSIER.conv_debut ? frDate(DOSSIER.conv_debut.date) : null
+  });
+  etapes.push({
+    etat: DOSSIER.date_debut ? 'done' : (DOSSIER.conv_debut ? 'active' : 'pending'),
+    titre: 'Début de stage déclaré',
+    desc: DOSSIER.date_debut ? 'Lieu de stage renseigné, en attente de confirmation par le BDS'
+                             : `À déclarer, au plus tôt le ${frDate(PLAN_ETU.debut)}`,
+    date: DOSSIER.date_debut ? frDate(DOSSIER.date_debut) : null
+  });
+  etapes.push({
+    etat: DOSSIER.date_debut ? 'active' : 'pending',
+    titre: PLAN_ETU.type==='STAGE' ? 'Stage en cours' : "Activité d'imprégnation en cours",
+    desc: `${PLAN_ETU.libelle} · ${dureeEntre(DOSSIER.date_debut||PLAN_ETU.debut, e.fin||PLAN_ETU.fin)}`,
+    date: `Du ${frDate(DOSSIER.date_debut||PLAN_ETU.debut)} au ${frDate(e.fin||PLAN_ETU.fin)}`
+  });
+  if(total){
+    const attendus = [];
+    if(a.convention) attendus.push('convention signée des trois parties');
+    if(a.rapport) attendus.push('rapport de stage');
+    if(a.autonotation) attendus.push("fiche d'auto-notation");
+    etapes.push({
+      etat: (faits===total && total>0) ? 'done' : 'pending',
+      titre: 'Dépôt des documents de fin',
+      desc: attendus.join(', '),
+      date: e.depot_fin ? `Avant le ${frDate(e.depot_fin)}`
+                        : (PLAN_ETU.depot_rapport ? `Avant le ${frDate(PLAN_ETU.depot_rapport)}` : null)
+    });
+  } else {
+    etapes.push({
+      etat: 'done',
+      titre: 'Aucun document de fin à déposer',
+      desc: "Votre classe effectue une activité d'imprégnation",
+      date: null
+    });
+  }
+
+  tl.innerHTML = etapes.map(x=>`
+    <div class="timeline-item">
+      <div class="tl-dot ${x.etat}">${x.etat==='done'?'✓':(x.etat==='active'?'◉':'○')}</div>
+      <div class="tl-content">
+        <div class="tl-title">${x.titre}</div>
+        <div class="tl-desc">${x.desc}</div>
+        ${x.date?`<div class="tl-date">${x.date}</div>`:''}
+      </div>
+    </div>`).join('');
+}
+// ==========================================================================
+// PANNEAU DE DEMONSTRATION
+// ==========================================================================
+// Il vit en dehors de l'application et ne touche a aucun ecran. Retirer le
+// bloc HTML correspondant et cette section suffit a le faire disparaitre.
+const DEMO_CAS = [
+  ["LIG3",  "Situation courante", "Licence 3, stage de session normale, dossier vierge"],
+  ["LIG2",  "Sans rapport",       "Licence 2, activité d'imprégnation : aucun document de fin"],
+  ["LIG3R", "Démarrage tardif",   "Licence 3 commencée le 15 juin : bascule en rattrapage"],
+  ["MDA1",  "Classe sans planning","Master 1 dont les dates ne sont pas encore publiées"],
+  ["LQSSE2","Sans modèle de lettre","Licence 2 dont les dates sont publiées mais le modèle vide"]
+];
+let PROFIL_COURANT = 'LIG3';
+
+function basculerDemo(){
+  const p = document.getElementById('demo-panneau');
+  const l = document.getElementById('demo-lanceur');
+  const ouvert = p.classList.toggle('ouvert');
+  l.style.display = ouvert ? 'none' : '';
+  if(ouvert) renderDemo();
+}
+
+function renderDemo(){
+  document.getElementById('demo-liste').innerHTML = DEMO_CAS.map(([cle,nom,cas]) =>
+    `<button class="demo-choix${cle===PROFIL_COURANT?' actif':''}" onclick="choisirDemo('${cle}')">
+       <div class="demo-choix-nom">${nom}</div>
+       <div class="demo-choix-cas">${cas}</div>
+     </button>`).join('');
+}
+
+function choisirDemo(cle){
+  chargerProfil(cle);
+  renderDemo();
+  // Connecte l'utilisateur si besoin, pour que le changement soit visible
+  // immediatement plutot qu'au prochain ecran.
+  if(!document.getElementById('app').classList.contains('visible')){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').classList.add('visible');
+    renderEntreprisesEtudiant();
+  }
+  toast('Situation chargée : ' + ETU.nom + ', ' + ETU.classe_nom);
+}
+
+function toast(msg){
+  let t = document.getElementById('als-toast');
+  if(!t){
+    t = document.createElement('div'); t.id='als-toast';
+    t.style.cssText = "position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);"+
+      "background:var(--card2);border:1px solid var(--border);color:var(--txt);"+
+      "padding:.85rem 1.4rem;border-radius:12px;font-size:.88rem;z-index:500;"+
+      "box-shadow:0 12px 40px #00000050;max-width:90vw;text-align:center";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg; t.style.display='block';
+  clearTimeout(t._t); t._t = setTimeout(()=>{t.style.display='none'}, 3200);
+}
+
+
 function doLogin(){
   const id=document.getElementById('login-id').value;
   const pw=document.getElementById('login-pw').value;
@@ -705,6 +1727,17 @@ function doLogin(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').classList.add('visible');
   renderEntreprisesEtudiant();
+  chargerProfil(profilDepuisIdentifiant(id));
+}
+
+// C'est le matricule qui identifie l'etudiant, comme dans l'application
+// reelle. Un identifiant inconnu ouvre le profil courant par defaut.
+function profilDepuisIdentifiant(saisi){
+  const v = (saisi||'').trim().toUpperCase();
+  for(const cle in PROFILS){
+    if(PROFILS[cle].identifiant.toUpperCase() === v) return cle;
+  }
+  return PROFIL_COURANT || 'LIG3';
 }
 function doLogout(){
   document.getElementById('app').classList.remove('visible');
@@ -714,7 +1747,11 @@ function showPage(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  el.classList.add('active');
+  // Sans ce garde-fou, toute navigation declenchee autrement que par un clic
+  // sur le menu levait une erreur et laissait le menu ouvert sur telephone.
+  const cible = el || [...document.querySelectorAll('.nav-item')].find(
+    n => (n.getAttribute('onclick')||'').indexOf("'"+id+"'") > -1);
+  if(cible) cible.classList.add('active');
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sb-overlay').classList.remove('open');
 }
@@ -802,7 +1839,7 @@ function renderEntreprisesEtudiant(){
     if(e.statut==='LISTE_NOIRE') noteHtml=`<div class="ent-card-meta">Aucune demande de lettre possible vers cette entreprise.</div>`;
     card.innerHTML=`
       <div class="ent-card-head">
-        <div><div class="ent-card-name">${e.nom}</div><div class="ent-card-meta">${e.forme||'—'} · Siège : ${e.siege||'—'}</div></div>
+        <div><div class="ent-card-name">${e.nom}</div><div class="ent-card-meta">${e.forme||'-'} · Siège : ${e.siege||'-'}</div></div>
         <span class="ent-badge ${b.cls}">${b.label}</span>
       </div>
       ${noteHtml}
@@ -825,12 +1862,12 @@ function rechercherEntreprise(){
     dispo.slice(0,6).forEach(e=>{
       const it=document.createElement('div');
       it.className='ac-item';
-      it.innerHTML=`${e.nom}<div class="ac-sub">Siège : ${e.siege||'—'}</div>`;
+      it.innerHTML=`${e.nom}<div class="ac-sub">Siège : ${e.siege||'-'}</div>`;
       it.onclick=()=>selectionnerEntreprise(e);
       box.appendChild(it);
     });
   }else{
-    box.innerHTML='<div class="ac-empty">Aucune entreprise connue avec ce nom — elle sera créée comme nouvelle fiche, à vérifier par le BDS.</div>';
+    box.innerHTML='<div class="ac-empty">Aucune entreprise connue avec ce nom : elle sera créée comme nouvelle fiche, à vérifier par le BDS.</div>';
   }
   box.classList.add('show');
 }
@@ -907,5 +1944,22 @@ document.addEventListener('click',function(ev){
   if(box && !box.contains(ev.target) && ev.target!==input) box.classList.remove('show');
 });
 </script>
+
+<!-- ===================================================================
+     PANNEAU DE DEMONSTRATION
+     ===================================================================
+     Hors de l'application : il ne fait partie d'aucun ecran et disparait
+     dans la version livree. Il sert uniquement a montrer les quatre
+     situations que le systeme distingue, sans avoir a se reconnecter.
+     =================================================================== -->
+<button class="demo-lanceur" id="demo-lanceur" onclick="basculerDemo()" title="Situations de démonstration">Démo</button>
+<div class="demo-panneau" id="demo-panneau">
+  <div class="demo-tete">
+    <strong>Situations de démonstration</strong>
+    <button class="demo-fermer" onclick="basculerDemo()" aria-label="Fermer">✕</button>
+  </div>
+  <p class="demo-note">Ce panneau ne fait pas partie de l'application. Il permet de parcourir les cinq cas qu'ALS distingue.</p>
+  <div id="demo-liste"></div>
+</div>
 </body>
 </html>
